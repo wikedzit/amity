@@ -1,2 +1,2 @@
 # amity
-Smart room allocator
+Smart room allocator, a simple but yet powerfull room allocator
