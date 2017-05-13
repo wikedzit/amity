@@ -1,0 +1,1 @@
+This folder contains the designs for Amity app
