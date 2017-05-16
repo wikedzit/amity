@@ -22,3 +22,59 @@ class Model(object):
 
     def get(source,attributes={}):
         print("get")
+#-----------------------------------------------------------
+
+
+
+class People(Model):
+    """docstring for Room"""
+
+    def __init__(self):
+        super(People,self).__init__()
+        self._name = ""
+#-------------------------------------------------------
+
+class Fellow(People):
+    """docstring for Office"""
+    _table = "people"
+    def __init__(self):
+        super(Fellow, self).__init__()
+
+#----------------------------------------------------------
+
+class Staff(People):
+    """docstring for Office"""
+    _table = "people"
+    def __init__(self):
+        super(Staff, self).__init__()
+#----------------------------------------------
+
+
+class Room(Model):
+    """docstring for Room"""
+    def __init__(self):
+        super(Room,self).__init__()
+        self._name = ""
+
+
+class Office(Room):
+    """docstring for Office"""
+    _table = "rooms"
+    def __init__(self):
+        super(Office, self).__init__()
+
+
+class Living(Room):
+    """docstring for Office"""
+    _table = "rooms"
+    def __init__(self):
+        super(Living, self).__init__()
+
+
+
+
+
+
+
+
+
