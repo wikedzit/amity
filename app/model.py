@@ -9,15 +9,14 @@ class Amity(object):
     db = {
         "rooms" :[],
         "people":[],
-        "allocations":[]
+        "allocations":[],
+        "un_allocated":[]
     }
 
-
+    cid = 0
     def __init__(self,oid=0, tb=None):
-        if oid == 0:
-            self.oid = int(round(time.time() * 1000))
-        else:
-            self.oid = oid
+        Amity.cid+=1
+        self.oid = Amity.cid
         self.table = tb
         self.data = {}
 
@@ -40,7 +39,7 @@ class Amity(object):
         for record in records:
             if record.oid == self.oid:
                 index = records.index(record)
-                del records[index]
+                del Amity.db[self.table][index]
                 return True
         return False
 
@@ -76,8 +75,18 @@ class Amity(object):
 class People(Amity):
     """docstring for Room"""
     _table = "people"
+    validators = {"firstname":r"([a-zA-Z]+)", 
+                            "lastname": r"([a-zA-Z]+)",
+                            "file":r"([a-zA-Z]+)"
+                        }
     def __init__(self,oid=0):
         super(People,self).__init__(oid,People._table)
+
+
+    def typeIs(self,type):
+        if self.data['type'] == type:
+            return True
+        return False
 
 #-------------------------------------------------------
 
@@ -102,39 +111,55 @@ class Staff(People):
 class Room(Amity):
     """docstring for Room"""
     _table = "rooms"
+    validators = {"name":r"(\w+)"}
+
     def __init__(self,oid=0):
         super(Room,self).__init__(oid,Room._table)
 
+    @classmethod
+    def getRooms(cls):
+        rooms = []
+        for room in Amity.db["rooms"]:
+            if room.data['type'] == cls.room_type:
+                rooms.append(room)
+        return rooms
+
+    def getOccupants(self):
+        return self.data["allocations"]
+
+    def hasOccupant(self,person):
+        return (person.oid in self.getOccupants())
+
+    @classmethod
+    def getAllAllocatedPeople(cls):
+        rooms = cls.getRooms()
+        occupants = []
+        for room in rooms:
+            occupants += room.data["allocations"]
+        return occupants
+
+    @classmethod
+    def locatePerson(cls,person):
+        rooms = Amity.db['rooms']
+        foundin= {}
+        for room in rooms:
+            if person.oid in room.data['allocations']:
+                foundin.update({room.data['type']:room.data['name']})
+
+        return foundin
 
 class Office(Room):
     """docstring for Office"""
+    room_type = "office"
     def __init__(self, oid=0, dt={}):
         super(Office, self).__init__(oid)
         self.data = dt
         self.data.update({"type":"office","capacity":6,"allocations":[]})
 
-    @classmethod
-    def getOffices(cls):
-        rooms = []
-        for room in Amity.db["rooms"]:
-            if room.data['type'] == "office":
-                rooms.append(room)
-        return rooms
-
-
-    def getOccupants(self):
-        return self.data["allocations"]
-
-    @classmethod
-    def getAllAllocatedPeople(cls):
-        offices = Office.getOffices()
-        occupants = []
-        for office in offices:
-            occupants += office.data["allocations"]
-        return occupants
 
 class Living(Room):
     """docstring for Office"""
+    room_type = "living"
     def __init__(self,oid=0, dt={}):
         super(Living, self).__init__(oid)
         self.data = dt

@@ -1,7 +1,9 @@
 import time
+import re
 from model import Amity
 from model import Office
 from model import Living 
+from model import People
 from model import Staff
 from model import Fellow
 
@@ -16,8 +18,13 @@ class Controller(object):
 
     @classmethod
     def new(cls,model_cls,data={"name":""}): 
-        oid = int(round(time.time() * 1000))
-        obj = model_cls(oid,data)
+        validators = model_cls.validators
+        for key, value in validators.items():
+            p = re.compile(value)
+            if key in data and (not p.match(data[key])):
+                return "Invalid Input" 
+
+        obj = model_cls(0,data)
         return obj.save()
 
     @classmethod
@@ -33,14 +40,14 @@ class Controller(object):
             return True
         return False
 
-
-    @classmethod
     def delete(model_cls,o_id):
         obj = model_cls.find(o_id)
         if isinstance(obj,model_cls):
             obj.delete()
+            RoomController.clean()
             return True
         return False
+
 
 #-----------------------------------------------
 
@@ -50,6 +57,28 @@ class RoomController(Controller):
         super(RoomController, self).__init__()
 
 
+    @classmethod
+    def clean(cls):
+        """    This method loops through all rooms to delete all Ids for people that have been deleted """
+        rooms  = Amity.db['rooms']
+        for room in rooms:
+            allocations = room.data['allocations'] 
+            r_index = rooms.index(room)
+            for person_id  in allocations:
+                staff = StaffController.getOne(Staff,person_id)
+                fellow = FellowController.getOne(Fellow,person_id)
+                if staff is None and fellow is None:
+                    p_index = allocations.index(person_id)
+                    del Amity.db['rooms'][r_index].data["allocations"][p_index]
+        return True
+
+    @classmethod
+    def personRoom(cls,typ,person):
+        rooms = Amity.db['rooms']
+        for room in rooms:
+            if person.oid in room.data['allocations'] and room.data["type"] == typ:
+                return room
+        return None
 #---------------------------------------------
 class OfficeController(RoomController):
     """docstring for ClassName"""
@@ -58,36 +87,96 @@ class OfficeController(RoomController):
 
     
     @classmethod
-    def allocate(cls,person):
-        rooms = Office.getOffices()
-        if len(rooms) == 0 :
-            return "No room is available"
+    def allocate(cls,room,person):
+       
+        if person.oid in Office.getAllAllocatedPeople():
+            return "Multiple assignment"
 
-        if person in Office.getAllAllocatedPeople():
-            return "You can not allocated the same person more tan one time"
+        if len(room.data['allocations']) < int(room.data['capacity']):
+            (room.data['allocations']).append(person.oid)
+            return True
+        else:
+            Amity.db["unallocated"].append([person.oid,"office"])
+            return "Room is full. This person is placed in a waiting list"
 
-        for room in rooms:
-            if len(room.data['allocations']) < int(room.data['capacity']):
-                (room.data['allocations']).append(person)
-                return True
-        return False
+    @classmethod
+    def reallocate(cls,room,person):
+        if len(room.data['allocations']) < int(room.data['capacity']):
+            prev_room = OfficeController.personRoom("office", person)
+            if isinstance(prev_room, Office):
+                indx = prev_room.data['allocations'].index(person.oid)
+                del prev_room.data['allocations'][indx]
 
+            return OfficeController.allocate(room,person)
+        else:
+            #Reaching here it means all the rooms are full
+            #Place this person in the waiting list while stating the tyoe of room
+            #Amity.db["unallocated"].append([person.oid,"office"])
+            return "This room is full. Can't reallocate this person, "
 #-----------------------------------------------
 
 #---------------------------------------------
-class LivingController(Controller):
+class LivingController(RoomController):
     """docstring for ClassName"""
     def __init__(self):
         super(LivingController, self).__init__()
-       
+
+
+
+    @classmethod
+    def allocate(cls,room,person):
+        if person.typeIs('staff'):
+            return "Staff can't be assigned a living room"
+
+        if person.oid in Living.getAllAllocatedPeople():
+            return "Multiple assignment"
+
+        if len(room.data['allocations']) < int(room.data['capacity']):
+            (room.data['allocations']).append(person.oid)
+            return True
+        else:
+            Amity.db["unallocated"].append([person.oid,"living"])
+            return "Room is full. This person is placed in a waiting list"
+
+    @classmethod
+    def reallocate(cls,room,person):
+        if len(room.data['allocations']) < int(room.data['capacity']):
+            prev_room = LivingController.personRoom("living", person)
+            if isinstance(prev_room, Living):
+                #delete any previous placements
+                indx = prev_room.data['allocations'].index(person.oid)
+                del prev_room.data['allocations'][indx]
+
+            #call for new reallocations
+            return LivingController.allocate(room,person)
+        else:
+            #Reaching here it means all the rooms are full
+            #Place this person in the waiting list while stating the tyoe of room
+            #Amity.db["unallocated"].append([person.oid,"office"])
+            return "This room is full. Can't reallocate this person, "
 #-----------------------------------------------
 
 
-class StaffController(Controller):
+class PeopleController(Controller):
+    """docstring for PeopleController"""
+    def __init__(self):
+        super(PeopleController, self).__init__()
+    
+    @classmethod
+    def importPeople(cls,file):
+        validators = People.validators
+        p = re.compile(validators['file'])
+        if not p.match(file):
+            return "Invalid file name." 
+
+class StaffController(PeopleController):
     """docstring for ClassName"""
     def __init__(self):
         super(StaffController, self).__init__()
 
 
-
+class FellowController(PeopleController):
+    """docstring for ClassName"""
+    def __init__(self):
+        super(FellowController, self).__init__()
 
