@@ -24,8 +24,7 @@ class Amity(object):
         tb = str(self.table)
         try:
             if self in Amity.db[tb]:
-                   # i =  Amity.db[tb].index(self)
-                   #Amity.db[tb][index].setData()
+                   # If this record alreasy exists in the db we skip saving a new one
                 pass
             else:
                 Amity.db[tb].append(self)
@@ -82,7 +81,7 @@ class People(Amity):
 
     def typeIs(self,type):
         if self.data['type'] == type:
-            gitreturn True
+            return True
         return False
 
 #-------------------------------------------------------
@@ -124,8 +123,10 @@ class Room(Amity):
     def getOccupants(self):
         return self.data["allocations"]
 
+
     def hasOccupant(self,person):
         return (person.oid in self.getOccupants())
+
 
     @classmethod
     def getAllAllocatedPeople(cls):
@@ -134,7 +135,6 @@ class Room(Amity):
         for room in rooms:
             occupants += room.data["allocations"]
         return occupants
-
 
     #@classmethod
     #def locatePerson(cls,person):
