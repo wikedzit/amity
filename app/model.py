@@ -10,7 +10,7 @@ class Amity(object):
         "rooms" :[],
         "people":[],
         "allocations":[],
-        "un_allocated":[]
+        "unallocated":[]
     }
 
     cid = 0
@@ -58,12 +58,9 @@ class Amity(object):
     def all(cls):
         return Amity.db[cls._table]
 
-
     def get(self,attribute):
-        return self.data[attribute]
+        return str(self.data[attribute])
 
-    def getData(self):
-        return self.data
 
     def setData(self,dt):
         for key in dt.keys():
@@ -85,7 +82,7 @@ class People(Amity):
 
     def typeIs(self,type):
         if self.data['type'] == type:
-            return True
+            gitreturn True
         return False
 
 #-------------------------------------------------------
@@ -138,15 +135,16 @@ class Room(Amity):
             occupants += room.data["allocations"]
         return occupants
 
-    @classmethod
-    def locatePerson(cls,person):
-        rooms = Amity.db['rooms']
-        foundin= {}
-        for room in rooms:
-            if person.oid in room.data['allocations']:
-                foundin.update({room.data['type']:room.data['name']})
 
-        return foundin
+    #@classmethod
+    #def locatePerson(cls,person):
+        #rooms = Amity.db['rooms']
+        #foundin= {}
+        #for room in rooms:
+            #if person.oid in room.data['allocations']:
+                #foundin.update({room.data['type']:room.data['name']})
+
+        #return foundin
 
 class Office(Room):
     """docstring for Office"""
@@ -154,7 +152,10 @@ class Office(Room):
     def __init__(self, oid=0, dt={}):
         super(Office, self).__init__(oid)
         self.data = dt
-        self.data.update({"type":"office","capacity":6,"allocations":[]})
+        if not "capacity" in dt:
+            self.data.update({"type":"office","capacity":6,"allocations":[]})
+        else:
+            self.data.update({"type":"office","allocations":[]})
 
 
 class Living(Room):
@@ -162,8 +163,12 @@ class Living(Room):
     room_type = "living"
     def __init__(self,oid=0, dt={}):
         super(Living, self).__init__(oid)
+        if not "capacity" in dt:
+            dt.update({"type":"living","capacity":4,"allocations":[]})
+        else:
+            dt.update({"type":"living","allocations":[]})
         self.data = dt
-        self.data.update({"type":"living","capacity":4,"allocations":[]})
+
 
 
 

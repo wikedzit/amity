@@ -13,7 +13,8 @@ class Controller(object):
     def __init__(self):
         pass
 
-    def getAll(model_cls):
+    @classmethod
+    def getAll(cls,model_cls):
         return model_cls.all()
 
     @classmethod
@@ -40,14 +41,16 @@ class Controller(object):
             return True
         return False
 
-    def delete(model_cls,o_id):
+    @classmethod
+    def delete(cls,model_cls,o_id):
         obj = model_cls.find(o_id)
         if isinstance(obj,model_cls):
             obj.delete()
+
+            # Call thi method to cascade person delete on rooms allocations
             RoomController.clean()
             return True
         return False
-
 
 #-----------------------------------------------
 
@@ -79,6 +82,19 @@ class RoomController(Controller):
             if person.oid in room.data['allocations'] and room.data["type"] == typ:
                 return room
         return None
+
+    @classmethod
+
+    def importRooms(cls, data):
+        #data imported from the file is paased as a multi dimension array to this method
+        #confirm that atleast each array item has three elements
+
+        for datum in data:
+            l = len(datum)
+            if l< 2 or l >3:
+                return "Data is not properly formated"
+
+        #Process data import
 #---------------------------------------------
 class OfficeController(RoomController):
     """docstring for ClassName"""
@@ -121,8 +137,6 @@ class LivingController(RoomController):
     def __init__(self):
         super(LivingController, self).__init__()
 
-
-
     @classmethod
     def allocate(cls,room,person):
         if person.typeIs('staff'):
@@ -163,11 +177,16 @@ class PeopleController(Controller):
         super(PeopleController, self).__init__()
     
     @classmethod
-    def importPeople(cls,file):
-        validators = People.validators
-        p = re.compile(validators['file'])
-        if not p.match(file):
-            return "Invalid file name." 
+    def importPeople(cls, data):
+        #data imported from the file is paased as a multi dimension array to this method
+        #confirm that atleast each array item has three elements
+
+        for datum in data:
+            l = len(datum)
+            if l<3 or l >4:
+                return "Data is not properly formated"
+
+        #Process data import
 
 class StaffController(PeopleController):
     """docstring for ClassName"""
