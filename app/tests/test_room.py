@@ -1,17 +1,8 @@
 import imports#import this first
 import unittest
 import time
-from model import Amity
-from model import People
-from model import Office
-from model import Staff
-from model import Fellow
-from model import Living
-from controller import OfficeController
-from controller import StaffController
-from controller import FellowController
-from controller import LivingController
-from controller import RoomController
+from model import Amity,People,Office,Staff,Fellow,Living
+from controller import OfficeController,StaffController, FellowController, LivingController,RoomController
 
 class TestRoom(unittest.TestCase):
     """docstring for OfficeTest"""
@@ -82,7 +73,6 @@ class TestRoom(unittest.TestCase):
         self.assertEqual(OfficeController.allocate(self.office, self.fellow),"Multiple assignment")
         totaloccupants_after =  self.office.getOccupants()
 
-        totaloccupants_before = self.office.getOccupants()
         self.assertEqual(totaloccupants_before,totaloccupants_after)
 
 
@@ -117,7 +107,7 @@ class TestRoom(unittest.TestCase):
        
        #create a third person
         f3= FellowController.new(Fellow,{"firstname":"Jackson", "lastname":"Onyango"})
-        self.assertEqual(OfficeController.allocate(living3,f3),"Room is full. This person is placed in a waiting list")
+        self.assertEqual(LivingController.allocate(living3,f3),"Room is full. This person is placed in a waiting list")
 
     def test_can_validate_imported_data(self):
         data = [["Dojo","living"], ["Narnia","office","6" ],["Hogwart"]]
@@ -126,16 +116,17 @@ class TestRoom(unittest.TestCase):
         #self.assertTrue(True)
 
     def test_can_delete_a_room(self):
-        offices = Office.all()
-        self.assertIn(self.office,offices)
+        offices_before = Office.all()
+        self.assertIn(self.office,offices_before)
         #delete this office
         
         OfficeController.delete(Office,self.office.oid)
         #check to prove that it has been deleted
-        offices = Office.all()
-        self.assertNotIn(self.office,offices)
+        offices_after = Office.all()
+        self.assertNotIn(self.office,offices_after)
         #self.assertTrue(True)
 
+        # adding the garbage colletor
 if __name__ == '__main__':
     unittest.main()
 
