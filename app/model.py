@@ -31,7 +31,7 @@ class People(Amity):
     @classmethod
     def load_people(cls):
        people = People.getAllPeople()
-       Amity.people = people
+       Amity['people '] = people
 
 #-------------------------------------------------------
 
@@ -77,7 +77,7 @@ class Room(Amity):
     @classmethod
     def loadRooms(cls):
         rooms = Room.getAllRooms()
-        Amity.rooms = rooms
+        Amity["rooms"] = rooms
 
     @classmethod
     def getRooms(cls):

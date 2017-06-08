@@ -19,10 +19,11 @@ class Amity(object):
         Amity is the root Model class. Defines data management functions
         that are inherited by all its subclasses
     """
-    rooms = None
-    people = None
+    db = {
+        "rooms":[],
+        "people":[]
+    }
 
-    db = datab
     def __init__(self):
         pass
 
@@ -100,9 +101,9 @@ class Amity(object):
     """        
     @classmethod
     def all(cls,flag=None):
+        tb = str(cls._table)
         try:
-            tb = str(cls._table)
-            data= Amity.db[tb].find(cls.fltr)
+            data= Amity.[tb].find(cls.fltr)
             records = []
             for datum in data:# Get datum as a  dictionary 
                 if len(datum) > 0: #Check if datum contains an item
@@ -139,10 +140,7 @@ class Amity(object):
     Returns the value for that key
     """
     def get(self,attrib):
-        oid = ObjectId(self.oid())
-        record = Amity.db[self.table].find_one({'_id':oid})
-        if attrib in record.keys():
-            self.data = record
+        if attrib in self.data.keys():
             return self.data[attrib]
         else:
             return None
@@ -153,7 +151,7 @@ class Amity(object):
     It is an instance variable, can be called by immediate and Deep Amity Subclassed objects
     """
     def oid(self):
-        return str(self.data['_id'])
+        return str(self.get('_id'))
 
 
     """------------------------------------------------------------------
