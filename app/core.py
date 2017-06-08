@@ -41,7 +41,6 @@ def delete_room(index):
       print("Failed to delete the room")
 
 
-
 def add_person(typ="fellow", fname="",lname="",accomodation="N"):
   person = None
   message= ""

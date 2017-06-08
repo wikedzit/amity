@@ -35,7 +35,7 @@ class Controller(object):
 
     @classmethod
     def delete(cls,obj):
-        obj1 = obj.__class__.find(obj.get('_id'))
+        obj1 = obj.__class__.find(obj.oid())
         if not obj1 is None:
             obj.delete()
             # Call thi method to cascade person delete on rooms allocations
@@ -106,6 +106,7 @@ class RoomController(Controller):
                         person = Fellow.find(person_id)
                         
                     p_index = allocations.index(person_id)
+
                     del room.data['allocations'][p_index]
                     room.save()
         return True
@@ -200,12 +201,4 @@ class FellowController(PeopleController):
     def __init__(self):
         super(FellowController, self).__init__()
 
-
-
-office = OfficeController.new(Office,{"name":"Tsavo"})
-staff = StaffController.new(Staff,{"firstname":"Roger", "lastname":"Taracha"})
-OfficeController.edit(office, {"name":"Hei"})
-
-#print(office.data)
-#OfficeController.allocate(office,staff)
 

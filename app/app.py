@@ -48,7 +48,7 @@ if __name__ == '__main__':
         index = int(index)
         if isinstance(index, int):
           index = (arguments['<room_identifier>'] )
-          response = raw_input(" Are you sure you want to delete this room [y/n] n ?")
+          response = input(" Are you sure you want to delete this room [y/n] n ?")
           if response == "n" or response == "N":
             print('Delete Cancelled')
           elif response == "y" or response == "Y": 

@@ -19,11 +19,12 @@ class Amity(object):
         Amity is the root Model class. Defines data management functions
         that are inherited by all its subclasses
     """
-    db = datab
-    def __init__(self, tb=None):
-        #Amity.db = datab
-        self.table = tb
+    rooms = None
+    people = None
 
+    db = datab
+    def __init__(self):
+        pass
 
     """-----------------------------------------------------------------------
     save()  method, used for storing edited and new records
@@ -46,7 +47,6 @@ class Amity(object):
         else:
             return self
 
-
     """------------------------------------------------------------------
     delete() method, used for deleting a single document/record in a collection/table
     It is an instance variable, can be called by immediate and Deep Amity Subclassed objects
@@ -61,8 +61,6 @@ class Amity(object):
             return False
         else:
             return True
-
-
 
 
     """-------------------------------------------------------------------
@@ -143,7 +141,6 @@ class Amity(object):
     def get(self,attrib):
         oid = ObjectId(self.oid())
         record = Amity.db[self.table].find_one({'_id':oid})
-        print(record)
         if attrib in record.keys():
             self.data = record
             return self.data[attrib]

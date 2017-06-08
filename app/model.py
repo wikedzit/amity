@@ -16,11 +16,22 @@ class People(Amity):
     def __init__(self):
         super(People,self).__init__(People._table)
 
+
     @classmethod
     def getAllPeople(cls):
         staff = Staff.all()
         fellow = Fellow.all()
         return staff + fellow
+
+
+    """-----------------------------------------------------------------------
+    load_data()  method, loads state of the DB
+    Successul save operation return a saved object
+    """
+    @classmethod
+    def load_people(cls):
+       people = People.getAllPeople()
+       Amity.people = people
 
 #-------------------------------------------------------
 
@@ -56,16 +67,22 @@ class Room(Amity):
     def __init__(self):
         super(Room,self).__init__(Room._table)
 
-    @classmethod
-    def getRooms(cls):
-        return cls.where({'type':cls.room_type})
-
 
     @classmethod
     def getAllRooms(cls):
         offices = Office.getRooms()
         living = Living.getRooms()
         return offices + living
+
+    @classmethod
+    def loadRooms(cls):
+        rooms = Room.getAllRooms()
+        Amity.rooms = rooms
+
+    @classmethod
+    def getRooms(cls):
+        return cls.where({'type':cls.room_type})
+
 
     def getOccupants(self):
         occupants = []
