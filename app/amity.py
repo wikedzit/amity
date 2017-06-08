@@ -127,11 +127,15 @@ class Amity(object):
     """        
     @classmethod
     def where(cls, fltr = {}):
-        data= Amity.db[cls._table].find(fltr)
+        tb = cls._table
+        data = Amity.db[tb]
+        if len(fltr) == 0:
+            return []
+
         records = []
         for datum in data:# Get datum as a  dictionary 
-            record = cls(datum)
-            records.append(record)
+            if filt.values() <=datum.data.values()
+                records.append(datum)
         return records
 
     """------------------------------------------------------------------
