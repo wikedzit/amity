@@ -36,61 +36,11 @@ class Amity(object):
     def save(self):
         tb = str(self.table)
         try:
-            if '_id' in self.data.keys():
-                oid = ObjectId(self.oid())
-                #del self.data['_id'] # Remove the iD since ID of an existing document/record cant be replaced in Mongo
-                Amity.db[tb].update_one({'_id':oid},{"$set":self.data})
-            else:
-                oid =  Amity.db[tb].insert_one(self.data).inserted_id
-            self.data.update({'_id':oid})#update  data Dict with an id to be used for referencing in code
+            Amity.db[tb].insert_one(self.data)
         except Exception as e:
             return "Failed to save the data"
         else:
             return self
-
-    """------------------------------------------------------------------
-    delete() method, used for deleting a single document/record in a collection/table
-    It is an instance variable, can be called by immediate and Deep Amity Subclassed objects
-    Called on an individual object / record to delete it
-    Returns True if delete operation is successfull and false otherwise
-    """
-    def delete(self):
-        try:
-            oid = ObjectId(self.oid())
-            Amity.db[self.table].delete_one({'_id':oid})
-        except Exception as e:
-            return False
-        else:
-            return True
-
-
-    """-------------------------------------------------------------------
-    find(ID) method, used to finding records with specific Id in a collection/Table
-    It is a class variable, can be called by immediate and Deep Subclassed of Amity Class
-    It takes in object ID for a record to find
-    It mapped it self to a class that is calling it effect the right setting including the collection/table to be used
-    """
-    @classmethod
-    def find(cls,oid):
-        oid = ObjectId(oid)
-        record = Amity.db[cls._table].find_one({'_id':oid})
-        if record:
-                return cls(record) ## Return a record that is mapped to a proper python class
-        return None
-
-
-    """-------------------------------------------------------------------
-    findWhere(FILTER) method, used to finding one record that matches the unique filter
-    It is a class variable, can be called by immediate and Deep Subclassed of Amity Class
-    It takes in object string name for a record to find
-    It mapped it self to a class that is calling it effect the right setting including the collection/table to be used
-    """
-    @classmethod
-    def findWhere(cls,fltr={}):
-        record = cls.where(fltr)
-        if len(record) > 0:
-                return record[0]
-        return None
 
 
     """-------------------------------------------------------------------
@@ -117,6 +67,50 @@ class Amity(object):
         else:
             return records
         return []
+
+
+
+    """------------------------------------------------------------------
+    delete() method, used for deleting a single document/record in a collection/table
+    It is an instance variable, can be called by immediate and Deep Amity Subclassed objects
+    Called on an individual object / record to delete it
+    Returns True if delete operation is successfull and false otherwise
+    """
+    def delete(self):
+        try:
+            oid = ObjectId(self.oid())
+            Amity.db[self.table].delete_one({'_id':oid})
+        except Exception as e:
+            return False
+        else:
+            return True
+
+    """-------------------------------------------------------------------
+    find(ID) method, used to finding records with specific Id in a collection/Table
+    It is a class variable, can be called by immediate and Deep Subclassed of Amity Class
+    It takes in object ID for a record to find
+    It mapped it self to a class that is calling it effect the right setting including the collection/table to be used
+    """
+    @classmethod
+    def find(cls,oid):
+        record = cls.findWhere({"_id":oid})
+        if record:
+                return record 
+        return None
+
+
+    """-------------------------------------------------------------------
+    findWhere(FILTER) method, used to finding one record that matches the unique filter
+    It is a class variable, can be called by immediate and Deep Subclassed of Amity Class
+    It takes in object string name for a record to find
+    It mapped it self to a class that is calling it effect the right setting including the collection/table to be used
+    """
+    @classmethod
+    def findWhere(cls,fltr={}):
+        record = cls.where(fltr)
+        if len(record) > 0:
+                return record[0]
+        return None
 
 
     """-------------------------------------------------------------------
@@ -148,6 +142,7 @@ class Amity(object):
             return self.data[attrib]
         else:
             return None
+
 
 
     """------------------------------------------------------------------
