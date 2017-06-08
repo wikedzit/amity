@@ -87,9 +87,9 @@ class Amity(object):
     """
     @classmethod
     def findWhere(cls,fltr={}):
-        record = Amity.db[cls._table].find_one(fltr)
-        if record:
-                return cls(record) ## Return a record that is mapped to a proper python class
+        record = cls.where(fltr)
+        if len(record) > 0:
+                return record[0]
         return None
 
 
