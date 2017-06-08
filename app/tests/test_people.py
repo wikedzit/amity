@@ -2,11 +2,12 @@ import imports#import this first
 import unittest
 import time
 
-from model import Amity,People,Office,Staff,Fellow
+from amity import Amity
+from model import People,Office,Staff,Fellow
 from controller import OfficeController, StaffController, FellowController, PeopleController
 
 
-class TestStaff(unittest.TestCase):
+class TestPerson(unittest.TestCase):
     """docstring for OfficeTest"""
     
     def setUp(self):
@@ -15,16 +16,16 @@ class TestStaff(unittest.TestCase):
    
     def test_person_is_created(self):
         fellow1 = FellowController.new(Fellow,{"firstname":"Akia", "lastname":"Mwanga"})
-        all_people = People.all()
-        self.assertIn(fellow1,all_people)
+        all_fellows = Fellow.all("ids")
+        self.assertIn(fellow1.oid(),all_fellows)
 
     def test_can_verify_names(self):
         data = {"firstname": "221Jimmy","lastname":"Kimani"}
         self.assertEqual(StaffController.new(Staff,data),"Invalid Input")
 
     def test_can_find_a_person(self):
-        staff1 = StaffController.getOne(Staff,self.staff.oid)
-        self.assertEqual(self.staff.oid,staff1.oid)
+        staff1 = StaffController.getOne(Staff,self.staff.oid())
+        self.assertEqual(self.staff.oid(),staff1.oid())
         self.assertEqual(self.staff.get("firstname"), "James")
 
 
@@ -37,15 +38,21 @@ class TestStaff(unittest.TestCase):
 
 
     def test_can_delete_a_person(self):
-        andelans_before = PeopleController.getAll(People)
-        self.assertIn(self.fellow,andelans_before)
+        andelans_before = Fellow.all('ids')
+        self.assertIn(self.fellow.oid(),andelans_before)
         
         #delete this person
-        FellowController.delete(Fellow,self.fellow.oid)
+        FellowController.delete(self.fellow)
         #check to prove that it has been deleted
-        andelans_after = PeopleController.getAll(People)
-        self.assertNotIn(self.fellow,andelans_after)
+        andelans_after = Fellow.all('_id')
+        self.assertNotIn(self.fellow.oid(),andelans_after)
 
+    def tearDown(self):
+        self.staff.delete()
+        self.fellow.delete()
+
+        self.staff = None
+        self.fellow = None
 
 if __name__ == '__main__':
     unittest.main()
