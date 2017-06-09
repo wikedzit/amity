@@ -126,7 +126,7 @@ class TestRoom(unittest.TestCase):
         self.living.delete()
         self.staff.delete()
         self.fellow.delete() 
-
+        
 if __name__ == '__main__':
     unittest.main()
 
