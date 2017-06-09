@@ -8,26 +8,29 @@ from model import Room,Office,Living ,People,Staff, Fellow
 class Controller(object):
 
     @classmethod
-    def getAll(cls,model_cls):
-        return model_cls.all()
-
-    @classmethod
-    def new(cls,model_cls,data={"name":""}): 
+    def new(cls,model_cls,data={}): 
         validators = model_cls.validators
+        #validate inputs
         for key, value in validators.items():
             p = re.compile(value)
             if key in data and (not p.match(data[key])):
                 return "Invalid Input" 
+        #check if record exists
+        if model_cls.find(data):
+            return "Duplicated record"
+
         obj = model_cls(data)
         return obj.save()
 
+
     @classmethod
-    def edit(cls,ob,dt):
-        obj = ob.__class__.find(ob.oid())
-        if not obj is None:
+    def edit(cls,obj,dt):
+        try:
             obj.setData(dt)
-            return obj.save()
-        return False
+        except Exception as e:
+            return False
+        else:
+            return True
 
     @classmethod
     def getOne(cls,model_cls,o_id):
@@ -200,5 +203,31 @@ class FellowController(PeopleController):
     """docstring for ClassName"""
     def __init__(self):
         super(FellowController, self).__init__()
+
+
+
+office1 = OfficeController.new(Office,{"name":"Tsavo"})
+office2 = OfficeController.new(Office,{"name":"Hogwart"})
+office3 = OfficeController.new(Office,{"name":"Tsavo"})
+
+print(office1)
+print(office2)
+print(office3)
+
+staff = StaffController.new(Staff,{"firstname":"Timothy", "lastname":"Wikedzi"})
+fellow = FellowController.new(Fellow,{"firstname":"Gladness", "lastname":"Mwanga"})
+
+#print(Office.all())
+#print(Amity.db)
+#office2.delete()      
+#print(Amity.db)
+
+#p = Fellow.find({"firstname":"Timothy", "lastname":"Wikedzi"})
+
+#print(p.get("firstname"))
+
+#office1.save_state()
+
+
 
 

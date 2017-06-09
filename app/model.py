@@ -4,7 +4,6 @@ from amity import Amity
 from bson.objectid import ObjectId
 
 
-
 class People(Amity):
     """docstring for Room"""
     _table = "people"
@@ -14,7 +13,8 @@ class People(Amity):
                             "file":r"([a-zA-Z]+)"
                         }
     def __init__(self):
-        super(People,self).__init__(People._table)
+        super(People,self).__init__()
+        self.table = People._table
 
 
     @classmethod
@@ -22,7 +22,6 @@ class People(Amity):
         staff = Staff.all()
         fellow = Fellow.all()
         return staff + fellow
-
 
     """-----------------------------------------------------------------------
     load_data()  method, loads state of the DB
@@ -41,12 +40,10 @@ class Fellow(People):
 
     def __init__(self,dt={}):
         super(Fellow, self).__init__()
-
         self.data = dt
         self.data.update({"type":"fellow"})
 
 #----------------------------------------------------------
-
 class Staff(People):
     """docstring for Office"""
     fltr = {"type": "staff"}
@@ -57,7 +54,6 @@ class Staff(People):
 #----------------------------------------------
 
 
-
 class Room(Amity):
     """docstring for Room"""
     _table = "rooms"
@@ -65,7 +61,8 @@ class Room(Amity):
     fltr = {}# it is a black filter because this is will fetch both offices and living spaces
 
     def __init__(self):
-        super(Room,self).__init__(Room._table)
+        super(Room,self).__init__()
+        self.table = Room._table
 
 
     @classmethod

@@ -27,6 +27,49 @@ class Amity(object):
     def __init__(self):
         pass
 
+
+    """-------------------------------------------------------------------
+    load() method, used for fetching all records/documents from a given collection/table
+    It is a class variable, can be called by immediate and Deep Subclassed of Amity Class
+    It mapped it self to a class that is calling it effect the right setting including the collection/table to be used
+    It returns a list of records mapped to respective class type 
+    """        
+    @classmethod
+    def load(cls,flag=None):
+        tb = str(cls._table)
+        try:
+            data= datab[tb].find(cls.fltr)
+            records = []
+            for datum in data:# Get datum as a  dictionary 
+                if len(datum) > 0: #Check if datum contains an item
+                    if flag == "ids":
+                        record = str(datum['_id'])
+                    else:
+                        record = cls(datum)
+                    records.append(record)
+        except Exception as e:
+            raise
+        else:
+            return records
+        return []
+
+
+    """-----------------------------------------------------------------------
+    save_state()  method, used for storing edited and new records
+    It is an instance variable, can be called by immediate and Deep Amity Subclassed objects
+    if an object has _id attribute it means we are editing the document, otherwise we insert it as new
+    Successul save operation return a saved object
+    """
+    def save_state(self):
+        tb = str(self.table)
+        try:
+            datab[tb].insert_one(self.data)
+        except Exception as e:
+            return "Failed to save the data"
+        else:
+            return self
+
+
     """-----------------------------------------------------------------------
     save()  method, used for storing edited and new records
     It is an instance variable, can be called by immediate and Deep Amity Subclassed objects
@@ -36,7 +79,7 @@ class Amity(object):
     def save(self):
         tb = str(self.table)
         try:
-            Amity.db[tb].insert_one(self.data)
+            Amity.db[tb].append(self)
         except Exception as e:
             return "Failed to save the data"
         else:
@@ -53,65 +96,29 @@ class Amity(object):
     def all(cls,flag=None):
         tb = str(cls._table)
         try:
-            data= Amity.[tb].find(cls.fltr)
+            objs = cls.where(cls.fltr)
             records = []
-            for datum in data:# Get datum as a  dictionary 
-                if len(datum) > 0: #Check if datum contains an item
-                    if flag == "ids":
-                        record = str(datum['_id'])
-                    else:
-                        record = cls(datum)
-                    records.append(record)
+            for obj in objs:# Get datum as a  dictionary 
+                if flag == "ids":
+                    obj = obj.data['_id']
+                records.append(obj)
         except Exception as e:
             raise
         else:
             return records
         return []
 
-
-
-    """------------------------------------------------------------------
-    delete() method, used for deleting a single document/record in a collection/table
-    It is an instance variable, can be called by immediate and Deep Amity Subclassed objects
-    Called on an individual object / record to delete it
-    Returns True if delete operation is successfull and false otherwise
-    """
-    def delete(self):
-        try:
-            oid = ObjectId(self.oid())
-            Amity.db[self.table].delete_one({'_id':oid})
-        except Exception as e:
-            return False
-        else:
-            return True
-
     """-------------------------------------------------------------------
     find(ID) method, used to finding records with specific Id in a collection/Table
     It is a class variable, can be called by immediate and Deep Subclassed of Amity Class
-    It takes in object ID for a record to find
     It mapped it self to a class that is calling it effect the right setting including the collection/table to be used
     """
     @classmethod
-    def find(cls,oid):
-        record = cls.findWhere({"_id":oid})
-        if record:
-                return record 
-        return None
-
-
-    """-------------------------------------------------------------------
-    findWhere(FILTER) method, used to finding one record that matches the unique filter
-    It is a class variable, can be called by immediate and Deep Subclassed of Amity Class
-    It takes in object string name for a record to find
-    It mapped it self to a class that is calling it effect the right setting including the collection/table to be used
-    """
-    @classmethod
-    def findWhere(cls,fltr={}):
+    def find(cls,fltr={}):
         record = cls.where(fltr)
         if len(record) > 0:
                 return record[0]
         return None
-
 
     """-------------------------------------------------------------------
     where(FILTER) method, used for fetching all records/documents from a given collection/table base of Filtering condition
@@ -123,12 +130,16 @@ class Amity(object):
     def where(cls, fltr = {}):
         tb = cls._table
         data = Amity.db[tb]
-        if len(fltr) == 0:
-            return []
-
         records = []
         for datum in data:# Get datum as a  dictionary 
-            if filt.values() <=datum.data.values()
+            if len(fltr) > 0:
+                found = 0
+                for f in fltr.values():
+                    if f in datum.data.values():
+                        found+=1
+                if found == len(fltr):
+                    records.append(datum)
+            if len(fltr)<=0:
                 records.append(datum)
         return records
 
@@ -142,8 +153,6 @@ class Amity(object):
             return self.data[attrib]
         else:
             return None
-
-
 
     """------------------------------------------------------------------
     oid() method, used returns an objectId for a record
@@ -173,6 +182,25 @@ class Amity(object):
         if self.get('type')== typ:
             return True
         return False
+
+
+
+
+    """------------------------------------------------------------------
+    delete() method, used for deleting a single document/record in a collection/table
+    It is an instance variable, can be called by immediate and Deep Amity Subclassed objects
+    Called on an individual object / record to delete it
+    Returns True if delete operation is successfull and false otherwise
+    """
+    def delete(self):
+        try:
+            Amity.db[self.table].remove(self)
+        except Exception as e:
+            return False
+        else:
+            return True
+
+
 
     """-------------------------------------------------------------------
     write(fiLE,DATA) method, used for writing data to a file
