@@ -17,26 +17,26 @@ class TestRoom(unittest.TestCase):
         self.fellow = FellowController.new(Fellow,{"firstname":"Timothy", "lastname":"Wikedzi"})
 
     def test_office_is_created(self):
-        offices = Office.all("ids")
-        self.assertIn(self.office.oid(),offices)
+        offices = Office.all("names")
+        self.assertIn(self.office.name(),offices)
 
     def test_living_space_is_created(self):
-        living_rooms = Living.all('ids')
-        self.assertIn(self.living.oid(),living_rooms)  
+        living_rooms = Living.all('names')
+        self.assertIn(self.living.name(),living_rooms)  
 
     def test_can_find_an_room(self):
-        office1 = OfficeController.getOne(Office,self.office.get('_id'))
-        self.assertEqual(self.office.get('_id'),office1.get('_id'))
+        office1 = OfficeController.getOne(Office,self.office.name())
+        self.assertEqual(self.office,office1)
 
     def test_can_update_details_of_an_office(self):
         office1 = OfficeController.new(Office,{"name":"Tanganyika"})
-        office1= OfficeController.edit(office1,{"name":"Kenya"})
+        OfficeController.edit(office1,{"name":"Kenya"})
         self.assertEqual(office1.get('name'), "Kenya")
 
     def test_can_update_details_of_a_living_room(self):
-        living1 = LivingController.new(Living,{"name":"Dojo"})
+        living1 = LivingController.new(Living,{"name":"Kampala"})
         room_name_before = living1.get('name')
-        living1 = LivingController.edit(living1,{"name":"St Catherine"})
+        LivingController.edit(living1,{"name":"St Catherine"})
         room_name_after  = living1.get('name')
         self.assertNotEqual(room_name_after, room_name_before)
 
@@ -44,12 +44,12 @@ class TestRoom(unittest.TestCase):
         #The allocate emthod takes in two arguments an office and a person
         OfficeController.allocate(self.office, self.staff)
         #confirm that a staff is really in that office
-        self.assertIn(self.staff.oid(),self.office.getOccupants())
+        self.assertIn(self.staff.name(),self.office.getOccupants())
 
-    def test_can_allocate_an_office_to_a_fellow(self):
+    def test_can_allocate_an_office_to_za_fellow(self):
         OfficeController.allocate(self.office, self.fellow)
         #confirm that a staff is really in that office
-        self.assertIn(str(self.fellow.oid()),self.office.getOccupants())
+        self.assertIn(self.fellow.name(),self.office.getOccupants())
 
 
     def test_staff_and_fellow_can_share_an_office(self):
@@ -57,17 +57,17 @@ class TestRoom(unittest.TestCase):
         OfficeController.allocate(self.office, self.fellow)
         #confirm that a staff is really in that office
 
-        staff_n_fellow = [self.staff.oid(),self.fellow.oid()]
-        self.assertEqual(staff_n_fellow.sort(),self.office.getOccupants().sort())
+        self.assertIn(self.staff.name(),self.office.getOccupants())
+        self.assertIn(self.fellow.name(),self.office.getOccupants())
 
     def test_can_not_allow_multiple_allocations(self):
         #Allocated a person to a room
         OfficeController.allocate(self.office, self.fellow)
-        totaloccupants_before = self.office.getOccupants()
+        totaloccupants_before = len(self.office.getOccupants())
 
         self.assertEqual(OfficeController.allocate(self.office, self.fellow),"Multiple assignments")
         #print(totaloccupants_before)
-        totaloccupants_after =  self.office.getOccupants()
+        totaloccupants_after =  len(self.office.getOccupants())
         self.assertEqual(totaloccupants_before,totaloccupants_after)
 
 
@@ -79,7 +79,7 @@ class TestRoom(unittest.TestCase):
 
         office2 = OfficeController.new(Office,{"name":"Finance"})
         OfficeController.reallocate(office2,self.staff)
-        #self.assertFalse(self.office.hasOccupant(self.staff))
+        self.assertFalse(self.office.hasOccupant(self.staff))
         self.assertTrue(office2.hasOccupant(self.staff))
 
     def test_can_not_allocate_a_living_room_to_staff(self):
@@ -93,7 +93,7 @@ class TestRoom(unittest.TestCase):
         living3 = LivingController.new(Office,{"name":"St Catherine TRM", "capacity":2})
 
         #create two members of this room
-        f1= FellowController.new(Fellow,{"firstname":"David", "lastname":"Mujibi"})
+        f1= FellowController.new(Fellow,{"firstname":"David", "lastname":"Mukibi"})
         f2= FellowController.new(Fellow,{"firstname":"Businge", "lastname":"Scott"})
 
         #Allocate the two fellows to their living room
@@ -108,17 +108,16 @@ class TestRoom(unittest.TestCase):
         data = [["Dojo","living"], ["Narnia","office","6" ],["Hogwart"]]
         response = RoomController.importRooms(data)
         self.assertEqual(response,"Data is not properly formated")
-        #self.assertTrue(True)
 
     def test_can_delete_a_room(self):
-        offices_before = Office.all("ids")
-        self.assertIn(self.office.oid(),offices_before)
+        offices_before = Office.all("names")
+        self.assertIn(self.office.name(),offices_before)
         #delete this office
         
         OfficeController.delete(self.office)
         #check to prove that it has been deleted
-        offices_after = Office.all("ids")
-        self.assertNotIn(self.office.oid(),offices_after)
+        offices_after = Office.all("names")
+        self.assertNotIn(self.office.name(),offices_after)
         #self.assertTrue(True)
 
 
@@ -127,11 +126,6 @@ class TestRoom(unittest.TestCase):
         self.living.delete()
         self.staff.delete()
         self.fellow.delete() 
-
-        self.staff = None
-        self.fellow = None
-        self.office = None
-        self.living= None
 
 if __name__ == '__main__':
     unittest.main()
