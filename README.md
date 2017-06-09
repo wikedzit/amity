@@ -23,20 +23,20 @@ Amit app runs on a desktop computer. To run this App you need python 3.x and Mon
 # 5. Commands.
 
 Command | Argument 
---- | --- | ---
-app.py add_room <type> <name>... 
-app.py delete_room  <name>
-app.py show_rooms
-app.py add_person <firstname> <lastname> <type> [<accomodation>]
-app.py delete_person <firstname> <lastname> 
-app.py show_people
-app.py auto_reallocate
-app.py reallocate <firstname> <lastname> <new_room_name>
-app.py load_people <people_file>
-app.py load_rooms <room_file>
-app.py print_allocations [<room_file>]
-app.py print_unallocated [<room_file>]
-app.py print_room  <print_room_name>  [<room_file>]
+--- | ---
+app.py add_room | <type> <name>... 
+app.py delete_room | <name>
+app.py show_rooms |
+app.py add_person | <firstname> <lastname> <type> [<accomodation>]
+app.py delete_person | <firstname> <lastname> 
+app.py show_people | 
+app.py auto_reallocate | 
+app.py reallocate | <firstname> <lastname> <new_room_name>
+app.py load_people | <people_file>
+app.py load_rooms | <room_file>
+app.py print_allocations | [<room_file>]
+app.py print_unallocated | [<room_file>]
+app.py print_room | <print_room_name>  [<room_file>]
 
 # 6. Installation and set up.
 
