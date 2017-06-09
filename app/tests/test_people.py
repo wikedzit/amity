@@ -16,18 +16,17 @@ class TestPerson(unittest.TestCase):
    
     def test_person_is_created(self):
         fellow1 = FellowController.new(Fellow,{"firstname":"Akia", "lastname":"Mwanga"})
-        all_fellows = Fellow.all("ids")
-        self.assertIn(fellow1.oid(),all_fellows)
+        all_fellows = Fellow.all("names")
+        self.assertIn(fellow1.name(),all_fellows)
 
     def test_can_verify_names(self):
         data = {"firstname": "221Jimmy","lastname":"Kimani"}
         self.assertEqual(StaffController.new(Staff,data),"Invalid Input")
 
     def test_can_find_a_person(self):
-        staff1 = StaffController.getOne(Staff,self.staff.oid())
-        self.assertEqual(self.staff.oid(),staff1.oid())
-        self.assertEqual(self.staff.get("firstname"), "James")
-
+        staff1 = StaffController.getOne(Staff,self.staff.name())
+        self.assertEqual(self.staff,staff1)
+        self.assertEqual(staff1.get("firstname"), "James")
 
     ##########separate the tests to include both tests for loding the file and validate thedata
     def test_can_validate_imported_data(self):
@@ -38,21 +37,19 @@ class TestPerson(unittest.TestCase):
 
 
     def test_can_delete_a_person(self):
-        andelans_before = Fellow.all('ids')
-        self.assertIn(self.fellow.oid(),andelans_before)
+        fellow1 = FellowController.new(Fellow,{"firstname":"Ayoub", "lastname":"Mugube"})
+        andelans_before = Fellow.all()
+        self.assertIn(fellow1,andelans_before)
         
         #delete this person
-        FellowController.delete(self.fellow)
+        FellowController.delete(fellow1)
         #check to prove that it has been deleted
-        andelans_after = Fellow.all('_id')
-        self.assertNotIn(self.fellow.oid(),andelans_after)
+        andelans_after = Fellow.all()
+        self.assertNotIn(fellow1,andelans_after)
 
     def tearDown(self):
         self.staff.delete()
         self.fellow.delete()
-
-        self.staff = None
-        self.fellow = None
 
 if __name__ == '__main__':
     unittest.main()
