@@ -15,10 +15,11 @@ class Controller(object):
             p = re.compile(value)
             if key in data and (not p.match(data[key])):
                 return "Invalid Input" 
+
         #check if record exists
         if model_cls.find(data):
             return "Duplicated record"
-
+            
         obj = model_cls(data)
         return obj.save()
 
@@ -50,18 +51,20 @@ class Controller(object):
     def load_state(cls):
         People.loadPeople()
         Room.loadRooms()
+        return True
 
     @classmethod
     def save_state(cls):
-
-        rooms = Room.all()
-        people = People.all()
+        Amity.cleanDb()
+        rooms = Room.getAllRooms()
+        people = People.getAllPeople()
         for room in rooms:
             room.save_state()
 
         for person in people:
             person.save_state()
         
+        return True
 #-----------------------------------------------
 class RoomController(Controller):
 
@@ -200,7 +203,3 @@ class FellowController(PeopleController):
     """docstring for ClassName"""
     def __init__(self):
         super(FellowController, self).__init__()
-
-
-
-

@@ -7,19 +7,19 @@ from termcolor import cprint
 from pyfiglet import figlet_format
 
 def app_intro():
-    click.secho('!' * 40, fg='yellow')
-    click.secho('-' * 40, fg='white')
+    click.secho('*' * 60, fg='yellow')
+    click.secho('*' * 60, fg='white')
     init(strip=not sys.stdout.isatty())  # # strip colors if stdout is redirected
-    cprint(figlet_format('Amity Allocation', font='big'), 'white')
-    click.secho('-' * 40, fg='white')
-    click.secho('!' * 40, fg='yellow')
+    cprint(figlet_format('Amity Room Allocation', font='big'), 'cyan')
+    click.secho('*' * 60, fg='white')
+    click.secho('*' * 60, fg='yellow')
 
 
 def intro_msg():
     click.secho(
         """
     """""""""""'Room allocation system'"""""""""
-        """, bold=True, fg='yellow')
+        """, bold=True, fg='white')
 
 
 def intro_header():

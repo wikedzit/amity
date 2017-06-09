@@ -12,6 +12,8 @@ class People(Amity):
                             "lastname": r"([a-zA-Z]+)",
                             "file":r"([a-zA-Z]+)"
                         }
+
+    
     def __init__(self):
         super(People,self).__init__()
         self.table = People._table
@@ -28,9 +30,11 @@ class People(Amity):
     Successul save operation return a saved object
     """
     @classmethod
-    def load_people(cls):
-       people = People.load()
-       Amity.db['people '] = people
+    def loadPeople(cls):
+        staff = Staff.load()
+        fellow = Fellow.load()
+        people = staff + fellow
+        Amity.db['people '] = people
 
     def name(self):
         return {"firstname":self.get('firstname'),"lastname":self.get("lastname")}
@@ -50,6 +54,7 @@ class Fellow(People):
 class Staff(People):
     """docstring for Office"""
     fltr = {"type": "staff"}
+
     def __init__(self,dt={}):
         super(Staff, self).__init__()
         self.data = dt
@@ -78,7 +83,9 @@ class Room(Amity):
 
     @classmethod
     def loadRooms(cls):
-        rooms = Room.load()
+        offices = Office.load()
+        living = Living.load()
+        rooms = offices + living
         Amity.db["rooms"] = rooms
 
     @classmethod

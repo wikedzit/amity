@@ -27,13 +27,12 @@ class Amity(object):
     def __init__(self):
         pass
 
-
     @classmethod
     def cleanDb(cls,flag=None):
         datab["rooms"].delete_many({})
         datab["people"].delete_many({})
 
-   """-------------------------------------------------------------------
+    """-------------------------------------------------------------------
     load() method, used for fetching all records/documents from a given collection/table
     It is a class variable, can be called by immediate and Deep Subclassed of Amity Class
     It mapped it self to a class that is calling it effect the right setting including the collection/table to be used

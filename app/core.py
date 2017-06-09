@@ -1,10 +1,31 @@
+import click
 from model import Amity,Room,Office,Living, People, Staff, Fellow
-from controller import PeopleController,RoomController,OfficeController, LivingController, FellowController, StaffController
+from controller import Controller, PeopleController,RoomController,OfficeController, LivingController, FellowController, StaffController
 
 
 class Core():
     def __init__(self):
       pass
+
+    def load_state(self):
+      try:
+        Controller.load_state()
+      except Exception as e:
+         click.secho("Failed to load data", fg='red', bold=True)
+         return       
+      else:
+        click.secho("Data Loaded", fg='green', bold=True)
+
+    def save_state(self):
+      try:
+        Controller.save_state()
+      except Exception as e:
+        click.secho("Failed to save data to the database", fg='red', bold=True)
+        return
+      else:
+        click.secho("Data saved to the database", fg='green', bold=True)
+      
+
 
     def add_room(self, typ="office", rooms=[]):
       message = ""
@@ -16,11 +37,10 @@ class Core():
           typ = "living"
           message =  LivingController.new(Living,{"name": room.title()})
         else:
-
-          print( typ, " is wrong room type")
+          click.secho( typ + " is wrong room type", fg='red', bold=True)
 
         if isinstance(message,Room):
-          print(room," ", typ ,"room has been created!!")
+           click.secho(room +" "+typ +"room has been created!!", fg='green', bold=True)
         else:
           print(message)
 
@@ -46,7 +66,7 @@ class Core():
           print("Room not found")
 
 
-    def add_person(self, typ="fellow", fname="",lname="",accomodation="N"):
+    def add_person(self, typ, fname="",lname="",accomodation="N"):
       person = None
       message= ""
       fname = fname.title(); lname = lname.title()
@@ -59,7 +79,8 @@ class Core():
       if typ == "staff" or typ =="s" :
         typ = "staff"
         message = StaffController.new(Staff,{"firstname":fname, "lastname":lname,"accomodation":accm})
-      if typ  == "fellow" or "f":
+      
+      if typ  == "fellow" or typ== "f":
         typ = "fellow"
         message = FellowController.new(Fellow, {"firstname":fname, "lastname":lname,"accomodation":accm})
 
@@ -325,15 +346,15 @@ class Core():
         app.py delete_room  <name>
         app.py show_rooms
         app.py add_person <firstname> <lastname> <type> [<accomodation>]
-        app.py delete_person <person_identifier>
+        app.py delete_person <firstname> <lastname> 
         app.py show_people
         app.py auto_reallocate
         app.py reallocate <firstname> <lastname> <new_room_name>
         app.py load_people <people_file>
         app.py load_rooms <room_file>
-        app.py print_allocations [-o FILE]
-        app.py print_unallocated [-o FILE]
-        app.py print_room  <print_room_name>  [-o FILE]
+        app.py print_allocations [<room_file>]
+        app.py print_unallocated [<room_file>]
+        app.py print_room  <print_room_name>  [<room_file>]
       """
       print(usage)
 
