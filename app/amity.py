@@ -28,24 +28,27 @@ class Amity(object):
         pass
 
 
-    """-------------------------------------------------------------------
+    @classmethod
+    def cleanDb(cls,flag=None):
+        datab["rooms"].delete_many({})
+        datab["people"].delete_many({})
+
+   """-------------------------------------------------------------------
     load() method, used for fetching all records/documents from a given collection/table
     It is a class variable, can be called by immediate and Deep Subclassed of Amity Class
     It mapped it self to a class that is calling it effect the right setting including the collection/table to be used
     It returns a list of records mapped to respective class type 
     """        
     @classmethod
-    def load(cls,flag=None):
+    def load(cls):
         tb = str(cls._table)
         try:
             data= datab[tb].find(cls.fltr)
             records = []
             for datum in data:# Get datum as a  dictionary 
                 if len(datum) > 0: #Check if datum contains an item
-                    if flag == "ids":
-                        record = str(datum['_id'])
-                    else:
-                        record = cls(datum)
+                    del datum['_id']
+                    record = cls(datum)
                     records.append(record)
         except Exception as e:
             raise
@@ -99,8 +102,8 @@ class Amity(object):
             objs = cls.where(cls.fltr)
             records = []
             for obj in objs:# Get datum as a  dictionary 
-                if flag == "ids":
-                    obj = obj.data['_id']
+                if flag == "names":
+                    obj = obj.name()
                 records.append(obj)
         except Exception as e:
             raise
@@ -182,7 +185,6 @@ class Amity(object):
         if self.get('type')== typ:
             return True
         return False
-
 
 
 

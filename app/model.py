@@ -29,7 +29,7 @@ class People(Amity):
     """
     @classmethod
     def load_people(cls):
-       people = People.getAllPeople()
+       people = People.load()
        Amity.db['people '] = people
 
     def name(self):
@@ -67,6 +67,8 @@ class Room(Amity):
         super(Room,self).__init__()
         self.table = Room._table
 
+    def name(self):
+        return {"name":self.get('name')}
 
     @classmethod
     def getAllRooms(cls):
@@ -76,13 +78,12 @@ class Room(Amity):
 
     @classmethod
     def loadRooms(cls):
-        rooms = Room.getAllRooms()
+        rooms = Room.load()
         Amity.db["rooms"] = rooms
 
     @classmethod
     def getRooms(cls):
         return cls.where({'type':cls.room_type})
-
 
     def getOccupants(self):
         return self.get("allocations")

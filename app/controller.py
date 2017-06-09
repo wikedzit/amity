@@ -46,6 +46,22 @@ class Controller(object):
             return True
         return False
 
+    @classmethod
+    def load_state(cls):
+        People.loadPeople()
+        Room.loadRooms()
+
+    @classmethod
+    def save_state(cls):
+
+        rooms = Room.all()
+        people = People.all()
+        for room in rooms:
+            room.save_state()
+
+        for person in people:
+            person.save_state()
+        
 #-----------------------------------------------
 class RoomController(Controller):
 
@@ -62,25 +78,22 @@ class RoomController(Controller):
                return "Multiple assignments"
 
         if len(room.getOccupants()) < int(room.get('capacity')):
-            occupant = {"firstname":person.get("firstname"),";lastname":person.get("lastname")}
+            occupant = {"firstname":person.get("firstname"),"lastname":person.get("lastname")}
             room.data['allocations'].append(occupant)#Add person to a list
             return "Room allocation was successful"
         else:
             #Amity.db["unallocated"].append([person.oid,"living"])
             return "Room is full. This person is placed in a waiting list"
 
-
     @classmethod
     def reallocate(cls,room,person):
         if len(room.getOccupants()) < int(room.get('capacity')):
             prev_room = cls.personRoom(room.get('type'), person)
             if prev_room:#This means that this person was placed in this room
-                if prev_room.get("type") == room.get("type"):
-                    #delete any previous placements
-                    indx = prev_room.getOccupants().index(person.name())
-                    del prev_room.data["allocations"][indx]
-                    #call for new reallocations after deleting
-                return "Room reallocation can only be done between rooms of the same type"
+                #delete any previous placements
+                indx = prev_room.getOccupants().index(person.name())
+                del prev_room.data["allocations"][indx]
+                #call for new reallocations after deleting
             return RoomController.allocate(room,person) + " (Reallocation)"
         else:
             return "This room is full. can't reallocate this person, "
@@ -99,6 +112,7 @@ class RoomController(Controller):
                         p_index = allocations.index(name)
                         del room.data['allocations'][p_index]
         return True
+
 
     @classmethod
     def personRoom(cls,typ,person):
@@ -135,7 +149,7 @@ class RoomController(Controller):
 
         for datum in data:
             l = len(datum)
-            if l< 2 or l >3:
+            if l< 1 or l >2:
                 return "Data is not properly formated" 
         return  data
 
@@ -186,34 +200,6 @@ class FellowController(PeopleController):
     """docstring for ClassName"""
     def __init__(self):
         super(FellowController, self).__init__()
-
-
-
-office1 = OfficeController.new(Office,{"name":"Tsavo"})
-office2 = OfficeController.new(Office,{"name":"Hogwart"})
-living = LivingController.new(Living,{"name":"Kampala"})
-
-
-staff = StaffController.new(Staff,{"firstname":"Timothy", "lastname":"Wikedzi"})
-fellow = FellowController.new(Fellow,{"firstname":"Gladness", "lastname":"Mwanga"})
-
-print(RoomController.allocate(office1,fellow))
-print(RoomController.allocate(office1,staff))
-print(office1.getOccupants())
-#print(RoomController.reallocate(office2,staff))
-#print(office2.getOccupants())
-
-PeopleController.delete(fellow)
-print(office1.getOccupants())
-#print(Amity.db)
-#office2.delete()      
-#print(Amity.db)
-
-#p = Fellow.find({"firstname":"Timothy", "lastname":"Wikedzi"})
-
-#print(p.get("firstname"))
-
-#office1.save_state()
 
 
 

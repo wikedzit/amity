@@ -1,0 +1,8 @@
+-------------------------------------------------------------
+List of unallocated people
+--------------------------------------------------------------
+SN	| Firstname		| Lastname		| Type
+--------------------------------------------------------------
+1	| Dominic		| Walters		| staff
+2	| Leigh		| Riley		| staff
+3	| Kelly		| Mcguire		| staff
