@@ -30,7 +30,10 @@ class People(Amity):
     @classmethod
     def load_people(cls):
        people = People.getAllPeople()
-       Amity['people '] = people
+       Amity.db['people '] = people
+
+    def name(self):
+        return {"firstname":self.get('firstname'),"lastname":self.get("lastname")}
 
 #-------------------------------------------------------
 
@@ -74,7 +77,7 @@ class Room(Amity):
     @classmethod
     def loadRooms(cls):
         rooms = Room.getAllRooms()
-        Amity["rooms"] = rooms
+        Amity.db["rooms"] = rooms
 
     @classmethod
     def getRooms(cls):
@@ -82,16 +85,10 @@ class Room(Amity):
 
 
     def getOccupants(self):
-        occupants = []
-        allocations = self.get("allocations");
-        for allocation in allocations:
-            occupants.append(str(allocation))
-
-        return occupants
+        return self.get("allocations")
 
     def hasOccupant(self,person):
-        return person.oid() in self.getOccupants()
-
+        return person.name() in self.getOccupants()
 
     @classmethod
     def getAllAllocatedPeople(cls):

@@ -22,7 +22,6 @@ class Controller(object):
         obj = model_cls(data)
         return obj.save()
 
-
     @classmethod
     def edit(cls,obj,dt):
         try:
@@ -33,19 +32,19 @@ class Controller(object):
             return True
 
     @classmethod
-    def getOne(cls,model_cls,o_id):
-        return model_cls.find(o_id)
+    def getOne(cls,model_cls,fltr={}):
+        return model_cls.find(fltr)
 
     @classmethod
     def delete(cls,obj):
-        obj1 = obj.__class__.find(obj.oid())
+        obj1 = obj.__class__.find(obj.data)
         if not obj1 is None:
             obj.delete()
             # Call thi method to cascade person delete on rooms allocations
-            RoomController.clean()
+            if isinstance(obj1,People):
+                RoomController.clean()
             return True
         return False
-
 
 #-----------------------------------------------
 class RoomController(Controller):
@@ -63,10 +62,9 @@ class RoomController(Controller):
                return "Multiple assignments"
 
         if len(room.getOccupants()) < int(room.get('capacity')):
-            room.data['allocations'].append(person.oid())#Add person to a list
-            if isinstance(room.save(), room.__class__):
-                return True
-            return "Failed to reallocate this person"
+            occupant = {"firstname":person.get("firstname"),";lastname":person.get("lastname")}
+            room.data['allocations'].append(occupant)#Add person to a list
+            return "Room allocation was successful"
         else:
             #Amity.db["unallocated"].append([person.oid,"living"])
             return "Room is full. This person is placed in a waiting list"
@@ -74,55 +72,40 @@ class RoomController(Controller):
 
     @classmethod
     def reallocate(cls,room,person):
-        if len(room.get('allocations')) < int(room.get('capacity')):
+        if len(room.getOccupants()) < int(room.get('capacity')):
             prev_room = cls.personRoom(room.get('type'), person)
-            if isinstance(prev_room, room.__class__):#This means that this person was placed in this room
-                #delete any previous placements
-                indx = prev_room.get('allocations').index(person.oid())
-                del prev_room.data["allocations"][indx]
-                prev_room.save()
-
-            #call for new reallocations
-            return cls.allocate(room,person)
+            if prev_room:#This means that this person was placed in this room
+                if prev_room.get("type") == room.get("type"):
+                    #delete any previous placements
+                    indx = prev_room.getOccupants().index(person.name())
+                    del prev_room.data["allocations"][indx]
+                    #call for new reallocations after deleting
+                return "Room reallocation can only be done between rooms of the same type"
+            return RoomController.allocate(room,person) + " (Reallocation)"
         else:
-            #Reaching here it means all the rooms are full
-            #Place this person in the waiting list while stating the tyoe of room
-            #Amity.db["unallocated"].append([person.oid,"office"])
-            return "This room is full. Can't reallocate this person, "
-
+            return "This room is full. can't reallocate this person, "
 
     @classmethod
     def clean(cls):
-        """    
-            This method loops through all rooms to delete all Ids for people that have been deleted 
-        """
-        office = Office.getRooms()
-        living  = Living.getRooms()
-
-        rooms = office + living
+        rooms = Room.getAllRooms()
         for room in rooms:
             allocations = room.getOccupants()
             if len(allocations) > 0 :
-                for person_id  in allocations:
-                    person = Staff.find(person_id)
+                for name  in allocations:
+                    person = Staff.find(name)
                     if person is None:
-                        person = Fellow.find(person_id)
-                        
-                    p_index = allocations.index(person_id)
-
-                    del room.data['allocations'][p_index]
-                    room.save()
+                        person = Fellow.find(name)
+                    if not person is None:
+                        p_index = allocations.index(name)
+                        del room.data['allocations'][p_index]
         return True
-
 
     @classmethod
     def personRoom(cls,typ,person):
-        offices = Office.getRooms()
-        living = Living.getRooms()
-        rooms = offices + living
+        rooms = Room.getAllRooms()
 
         for room in rooms:
-            if (person.oid() in room.get('allocations') ) and room.get("type") == typ:
+            if (room.hasOccupant(person)) and room.get("type") == typ:
                 return room
         return None
 
@@ -133,7 +116,7 @@ class RoomController(Controller):
     def getRoom(cls, model_cls):
         rooms = model_cls.all()
         for room in rooms:
-            if len(room.get("allocations")) < room.get("capacity"):
+            if len(room.getOccupants()) < int(room.get("capacity")):
                 return room
         return None
 
@@ -208,16 +191,20 @@ class FellowController(PeopleController):
 
 office1 = OfficeController.new(Office,{"name":"Tsavo"})
 office2 = OfficeController.new(Office,{"name":"Hogwart"})
-office3 = OfficeController.new(Office,{"name":"Tsavo"})
+living = LivingController.new(Living,{"name":"Kampala"})
 
-print(office1)
-print(office2)
-print(office3)
 
 staff = StaffController.new(Staff,{"firstname":"Timothy", "lastname":"Wikedzi"})
 fellow = FellowController.new(Fellow,{"firstname":"Gladness", "lastname":"Mwanga"})
 
-#print(Office.all())
+print(RoomController.allocate(office1,fellow))
+print(RoomController.allocate(office1,staff))
+print(office1.getOccupants())
+#print(RoomController.reallocate(office2,staff))
+#print(office2.getOccupants())
+
+PeopleController.delete(fellow)
+print(office1.getOccupants())
 #print(Amity.db)
 #office2.delete()      
 #print(Amity.db)
