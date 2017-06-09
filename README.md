@@ -35,7 +35,7 @@ app.py reallocate | <firstname> <lastname> <new_room_name>
 app.py load_people | <people_file>
 app.py load_rooms | <room_file>
 app.py print_allocations | [<room_file>]
-app.py print_unallocated | [<room_file>]
+app.py print_unallocated | [<room_file>] 
 app.py print_room | <print_room_name>  [<room_file>]
 
 # 6. Installation and set up.
