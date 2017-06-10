@@ -14,7 +14,7 @@ class Core():
          click.secho("Failed to load data", fg='red', bold=True)
          return       
       else:
-        click.secho("Data Loaded", fg='green', bold=True)
+        click.secho("Data Loaded", fg='green')
 
     def save_state(self):
       try:

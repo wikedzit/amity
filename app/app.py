@@ -21,6 +21,7 @@ class App(cmd.Cmd):
     def do_load_state(self,  args):
       core.load_state()
 
+
     def do_save_state(self,  args):
       core.save_state()
 
@@ -66,17 +67,15 @@ class App(cmd.Cmd):
 
         room_name = parsed_input["<name>"]
         if room_name:
-          response = click.secho("Are you sure you want to delete this room [y/n] n ?", fg='yellow', bold=True)
-          if response == "n" or response == "N":
-            click.secho("Delete Cancelled", fg='cyan', bold=True)
-          elif response == "y" or response == "Y": 
-            core.delete_room(room_name)
+          response = click.confirm("Are you sure you want to delete this room?")
+          if response == "n" or response == False or response == "N":
+              click.secho("Delete Cancelled", fg='cyan', bold=True)
+          elif response == "y" or response == "Y" or response== True: 
+              core.delete_room(room_name)
           else:
-            click.secho("Wrong response. response can only be n or y", fg='yellow', bold=True)
-
+              click.secho("Wrong response. response can only be n or y", fg='yellow')
         else:
-          click.secho("Room name can not be empty", fg='red', bold=True)
-
+            click.secho("Room name can not be empty", fg='red', bold=True)
 
 
     def do_add_person(self, args):
@@ -112,15 +111,15 @@ class App(cmd.Cmd):
       lastname = parsed_input["<lastname>"]
 
       if firstname and lastname:
-        response = click.secho("Are you sure you want to delete this person [y/n] n ?", fg='yellow', bold=True)
-        if response == "n" or response == "N":
-          click.secho("Delete Cancelled", fg='cyan', bold=True)
-        elif response == "y" or response == "Y": 
-          core.delete_person(firstname,lastname)
-        else:
-          click.secho("Wrong response. response can only be n or y", fg='yellow', bold=True)
+          response = click.confirm("Are you sure you want to delete this person ?")         
+          if response == "n" or response == False or response == "N":
+              click.secho("Delete Cancelled", fg='cyan', bold=True)
+          elif response == "y" or response == "Y" or response== True: 
+              core.delete_person(firstname,lastname)
+          else:
+              click.secho("Wrong response. response can only be n or y", fg='yellow')
       else:
-       click.secho("Provide firstname and lastname of a person you want to delete", fg='red', bold=True)
+          click.secho("Room name can not be empty", fg='red', bold=True)
 
 
     def do_show_people(self,  args):
@@ -239,7 +238,7 @@ class App(cmd.Cmd):
     def do_quit(self, arg):
             """Quits out of Interactive Mode."""
 
-            click.secho('Thank you for using Amity Allocation App', fg='red', bold=True)
+            click.secho('Thank you for using Amity Allocation App', fg='red')
             exit()
 
 

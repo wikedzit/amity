@@ -29,6 +29,7 @@ def intro_header():
     with click.progressbar(range(10000), fill_char=click.style('(', fg='white', bg='red')) as prog_bar:
         for i in prog_bar:
             pass
+        click.secho("  Data loaded from the Database", fg='green')
 
     click.secho('' * 75)
     click.secho('' * 75)
