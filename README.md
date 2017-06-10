@@ -4,26 +4,26 @@
 # Amity (Room Allocation App)
 Smart room allocator, a simple but yet powerfull room allocator
 
-# 1. About the App.
+## 1. About the App.
 
 This is a basic Command line application that can be used to mange room allocations in a office or schoolenviroment where offices and accomodation rooms are shared. 
 The app implementes functionalities for two main components Rooms and People. Rooms are of two types Offices and Living Space (refered to living in the app)
 
-# 2. Constraints
+## 2. Constraints
 >An office can contain a maximum of 6 people 
 >A living space takes in a maximum of 4 people.
 >Offices can be shared by both Staff and Fellows
 >Staff can not be allocated a living space
 
-# 3. Implementation
-Amity has been implemented  and tested using Python 3.6, other versions can be supported too. The app features two main tiers the User Interface (CLI) and the database (MngoDb and text files)
+## 3. Implementation
+Amity has been implemented  and tested using Python 3.6, other versions of python have been tested to work fine and can be supported too. The app features two main tiers the User Interface (CLI) and the database (MngoDb and text files)
 
 
-# 4. Requirements
+## 4. Requirements
 Amit app runs on a desktop computer. To run this App you need python 3.x and MongoDb v3.2+ installed on your Computer.
 
 
-# 5. Commands.
+## 5. Commands.
 
 Command | Argument 
 --- | ---
@@ -41,7 +41,7 @@ app.py print_allocations | [(room_file)]
 app.py print_unallocated | [(room_file)] 
 app.py print_room | (print_room_name)  [(room_file)]
 
-# 6. Installation and set up.
+## 6. Installation and set up.
 
 1. Confirm that Python is installed on your PC
 2. Download and install MongoDB
@@ -50,12 +50,12 @@ app.py print_room | (print_room_name)  [(room_file)]
 5. Create a **virtualenv** on your machine and install the dependencies via `pip install -r requirements.txt` and activate it.
 6. Once all the requirements have been installed, navigate to amity/app and run python app.py
 
-# 7. Usage
+## 7. Usage
 
 The following screencast shows how to run the different commands. Check it out:
 
 
-# 8. Tests.
+## 8. Tests.
 
 To run nosetests ensure that you are within the *virtual environment* and have the following installed:
 
