@@ -18,10 +18,6 @@ class App(cmd.Cmd):
     def do_help(self,  args):
       core.help()
 
-    def do_load_state(self,  args):
-      core.load_state()
-
-
     def do_save_state(self,  args):
       core.save_state()
 
@@ -96,6 +92,7 @@ class App(cmd.Cmd):
       core.add_person(person_type,firstname,lastname,accomodation)
 
 
+
     def do_delete_person(self,  args):
       """
       Usage: delete_person <firstname> <lastname>
@@ -122,6 +119,7 @@ class App(cmd.Cmd):
           click.secho("Room name can not be empty", fg='red', bold=True)
 
 
+
     def do_show_people(self,  args):
         """
         Usage: show_people
@@ -133,6 +131,8 @@ class App(cmd.Cmd):
         except DocoptExit  as e:
             print(e)
             return
+
+
 
     def do_reallocate(self, args):
       """
@@ -150,6 +150,8 @@ class App(cmd.Cmd):
       to_room_name = parsed_input["<to_room_name>"].title()
       core.reallocate(firstname,lastname,to_room_name)
 
+
+
     def do_auto_reallocate(self,  args):
         """
         Usage: auto_reallocate
@@ -161,6 +163,8 @@ class App(cmd.Cmd):
         except DocoptExit  as e:
             print(e)
             return
+
+
 
     def do_print_allocations(self,  args):
         """
@@ -176,6 +180,8 @@ class App(cmd.Cmd):
         file_name = parsed_input["<file_name>"]
         core.print_allocations(file_name)
 
+
+
     def do_print_unallocated(self,  args):
         """
         Usage: print_unallocated [<file_name>]
@@ -186,9 +192,44 @@ class App(cmd.Cmd):
         except DocoptExit  as e:
             print(e)
             return
-
+        
         file_name = parsed_input["<file_name>"]
         core.print_unallocated(file_name)
+    
+
+
+
+    def do_print_unallocated_office(self,  args):
+        """
+        Usage: print_unallocated_office [<file_name>]
+        """
+        parsed_input = None
+        try:
+            parsed_input = docopt(self.do_print_unallocated_office.__doc__, args)
+        except DocoptExit  as e:
+            print(e)
+            return
+        
+        file_name = parsed_input["<file_name>"]
+        core.print_unallocated_office(file_name)
+
+
+
+
+    def do_print_unallocated_living(self,  args):
+        """
+        Usage: print_unallocated_living [<file_name>]
+        """
+        parsed_input = None
+        try:
+            parsed_input = docopt(self.do_print_unallocated_living.__doc__, args)
+        except DocoptExit  as e:
+            print(e)
+            return
+        
+        file_name = parsed_input["<file_name>"]
+        core.print_unallocated_living(file_name)
+
 
 
     def do_print_room(self,  args):
@@ -206,6 +247,8 @@ class App(cmd.Cmd):
         file_name = parsed_input["<file_name>"]
         core.print_room(room_name,file_name)
 
+
+
     def do_load_people(self,  args):
         """
         Usage: load_people <file_name>
@@ -219,6 +262,7 @@ class App(cmd.Cmd):
 
         file_name = parsed_input["<file_name>"]
         core.load_people(file_name)
+
 
 
     def do_load_rooms(self,  args):
@@ -235,16 +279,34 @@ class App(cmd.Cmd):
         file_name = parsed_input["<file_name>"]
         core.load_rooms(file_name)
 
-    def do_quit(self, arg):
-            """Quits out of Interactive Mode."""
 
-            click.secho('Thank you for using Amity Allocation App', fg='red')
-            exit()
+
+    def do_quit(self, arg):
+        """Quits out of Interactive Mode."""
+        response = click.confirm("Do you want to save state before exiting ?")         
+        if response == "y" or response == "Y" or response== True: 
+          core.save_state()
+          click.secho('Thank you for using Amity Room Allocation App', fg='green')
+        else:
+          click.secho('Thank you for using Amity Room Allocation App', fg='green')
+
+        exit()
+
+
+
+    def do_exit(self, arg):
+        """Quits out of Interactive Mode."""
+        response = click.confirm("Do you want to save state before exiting ?")         
+        if response == "y" or response == "Y" or response== True: 
+          core.save_state()
+          click.secho('Thank you for using Amity Room Allocation App', fg='green')
+        else:
+          click.secho('Thank you for using Amity Room Allocation App', fg='green')
+
+        exit()
+
 
 
 if  __name__ ==  "__main__" :
   app = App()
   app.cmdloop()
-
-
-

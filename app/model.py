@@ -7,17 +7,16 @@ from bson.objectid import ObjectId
 class People(Amity):
     """docstring for Room"""
     _table = "people"
-    fltr = {}# It is a black filter because this will return both staff and fellows
+    fltr = {} # It is a black filter because this will return both staff and fellows
     validators = {"firstname":r"([a-zA-Z]+)", 
                             "lastname": r"([a-zA-Z]+)",
                             "file":r"([a-zA-Z]+)"
                         }
 
-    
+
     def __init__(self):
         super(People,self).__init__()
-        self.table = People._table
-
+        self.table = "people"
 
     @classmethod
     def getAllPeople(cls):
@@ -25,16 +24,11 @@ class People(Amity):
         fellow = Fellow.all()
         return staff + fellow
 
-    """-----------------------------------------------------------------------
-    load_data()  method, loads state of the DB
-    Successul save operation return a saved object
-    """
     @classmethod
     def loadPeople(cls):
         staff = Staff.load()
         fellow = Fellow.load()
-        people = staff + fellow
-        Amity.db['people '] = people
+        Amity.db['people'] = staff + fellow
 
     def name(self):
         return {"firstname":self.get('firstname'),"lastname":self.get("lastname")}
@@ -70,27 +64,22 @@ class Room(Amity):
 
     def __init__(self):
         super(Room,self).__init__()
-        self.table = Room._table
+        self.table = "rooms"
 
     def name(self):
         return {"name":self.get('name')}
 
     @classmethod
     def getAllRooms(cls):
-        offices = Office.getRooms()
-        living = Living.getRooms()
+        offices = Office.all()
+        living = Living.all()
         return offices + living
 
     @classmethod
-    def loadRooms(cls):
+    def loadRooms(cls): 
         offices = Office.load()
         living = Living.load()
-        rooms = offices + living
-        Amity.db["rooms"] = rooms
-
-    @classmethod
-    def getRooms(cls):
-        return cls.where({'type':cls.room_type})
+        Amity.db["rooms"] = offices + living
 
     def getOccupants(self):
         return self.get("allocations")
@@ -105,17 +94,6 @@ class Room(Amity):
         for room in rooms:
             occupants += room.data["allocations"]
         return occupants
-
-
-    #@classmethod
-    #def locatePerson(cls,person):
-        #rooms = Amity.db['rooms']
-        #foundin= {}
-        #for room in rooms:
-            #if person.oid in room.data['allocations']:
-                #foundin.update({room.data['type']:room.data['name']})
-
-        #return foundin
 
 
 class Office(Room):

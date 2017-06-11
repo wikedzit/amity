@@ -105,10 +105,10 @@ class Amity(object):
                     obj = obj.name()
                 records.append(obj)
         except Exception as e:
-            raise
+            return []
         else:
             return records
-        return []
+        
 
     """-------------------------------------------------------------------
     find(ID) method, used to finding records with specific Id in a collection/Table
@@ -200,7 +200,6 @@ class Amity(object):
             return False
         else:
             return True
-
 
 
     """-------------------------------------------------------------------

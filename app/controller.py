@@ -18,7 +18,7 @@ class Controller(object):
 
         #check if record exists
         if model_cls.find(data):
-            return "Duplicated record"
+            return "Record already exists"
             
         obj = model_cls(data)
         return obj.save()
@@ -83,7 +83,7 @@ class RoomController(Controller):
         if len(room.getOccupants()) < int(room.get('capacity')):
             occupant = {"firstname":person.get("firstname"),"lastname":person.get("lastname")}
             room.data['allocations'].append(occupant)#Add person to a list
-            return "Room allocation was successful"
+            return True
         else:
             #Amity.db["unallocated"].append([person.oid,"living"])
             return "Room is full. This person is placed in a waiting list"
@@ -97,7 +97,7 @@ class RoomController(Controller):
                 indx = prev_room.getOccupants().index(person.name())
                 del prev_room.data["allocations"][indx]
                 #call for new reallocations after deleting
-            return RoomController.allocate(room,person) + " (Reallocation)"
+            return RoomController.allocate(room,person)
         else:
             return "This room is full. can't reallocate this person, "
 
