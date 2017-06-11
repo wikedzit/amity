@@ -101,7 +101,7 @@ class RoomController(Controller):
                     return True
                 else:
                     return message
-            return "Failed to reallocate the " + person.get("firstname") + " " + person.get("lastname") + " to " + room.get('name')
+            return "Could not reallocate " + person.get("firstname") + " " + person.get("lastname") + " to " + room.get('name')
         else:
             return "This room is full. can't reallocate this person, "
 

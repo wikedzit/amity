@@ -134,7 +134,7 @@ class Core():
       person = People.find({"firstname":firstname.title(),"lastname":lastname.title()})
       if person:
         if PeopleController.delete(person):
-          click.secho(firstname.title(), " ", lastname.title(), " record deleted successfull",fg='green')
+          click.secho(firstname.title() + " " + lastname.title() + " record deleted successfull",fg='green')
         else:
           click.secho("Failed to delete  " + firstname + " " + lastname, fg='red')
       else:
@@ -200,6 +200,7 @@ class Core():
 
     def print_allocations(self, save_to_file=None):
       rooms = Room.getAllRooms()
+
       
       if len(rooms) == 0:
         click.secho("Rooms are not available, use command add_room or load_rooms to add new rooms",fg='yellow')

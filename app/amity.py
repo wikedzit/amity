@@ -28,9 +28,14 @@ class Amity(object):
         pass
 
     @classmethod
-    def cleanDb(cls,flag=None):
-        datab["rooms"].delete_many({})
-        datab["people"].delete_many({})
+    def cleanDb(cls):
+        try:
+            datab["rooms"].remove({})
+            datab["people"].remove({})
+        except Exception as e:
+            raise
+        else:
+            return
 
     """-------------------------------------------------------------------
     load() method, used for fetching all records/documents from a given collection/table
@@ -48,6 +53,8 @@ class Amity(object):
                 if len(datum) > 0: #Check if datum contains an item
                     del datum['_id']
                     record = cls(datum)
+                    print(datum)
+
                     records.append(record)
         except Exception as e:
             raise

@@ -103,11 +103,15 @@ class Office(Room):
 
     def __init__(self, dt={}):
         super(Office, self).__init__()
-        self.data = dt
         if not "capacity" in dt.keys():
-            self.data.update({"type":"office","capacity":6,"allocations":[]})
-        else:
-            self.data.update({"type":"office","allocations":[]})
+            dt.update({"capacity":6})
+       
+        if not "type" in dt.keys():
+            dt.update({"type":"office"})
+        
+        if not "allocations" in dt.keys():
+            dt.update({"allocations":[]})
+        self.data = dt
 
 
 class Living(Room):
@@ -118,10 +122,15 @@ class Living(Room):
     def __init__(self, dt={}):
         super(Living, self).__init__()
         if not "capacity" in dt.keys():
-            dt.update({"type":"living","capacity":4,"allocations":[]})
-        else:
-            dt.update({"type":"living","allocations":[]})
+            dt.update({"capacity":4})
+       
+        if not "type" in dt.keys():
+            dt.update({"type":"living"})
+        
+        if not "allocations" in dt.keys():
+            dt.update({"allocations":[]})
         self.data = dt
+
 
 
 
