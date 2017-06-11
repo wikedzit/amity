@@ -53,8 +53,6 @@ class Amity(object):
                 if len(datum) > 0: #Check if datum contains an item
                     del datum['_id']
                     record = cls(datum)
-                    print(datum)
-
                     records.append(record)
         except Exception as e:
             raise

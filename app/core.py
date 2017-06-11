@@ -212,7 +212,7 @@ class Core():
           out.append("-------------------------------------------------------------------")
           out.append( room.get("name")  + " Total occupants " + str(len(room.getOccupants())))
           out.append("-------------------------------------------------------------------")
-          out.append("SN\t| Firstname\t\t| Lastname\t\t| Type" )
+          out.append("SN\t| Firstname \t\t| Lastname \t\t| Type" )
           out.append("-------------------------------------------------------------------")
           count = 0
           for person_id in allocations:
@@ -221,7 +221,7 @@ class Core():
               person = Fellow.find(person_id)
             if not person is None:
               count+=1
-              s = str(count)+ "\t| "+ str(person.get('firstname')) +  "\t| " + str(person.get('lastname'))+  "\t| " + str(person.get('type'))
+              s = str(count)+ "\t| "+ str(person.get('firstname')) +  " \t\t| " + str(person.get('lastname'))+  " \t\t| " + str(person.get('type'))
               out.append(s)
 
         if not save_to_file is None: # Prepare data for saving to file
@@ -244,7 +244,7 @@ class Core():
       out.append("-------------------------------------------------------------")
       out.append("List of unallocated people")
       out.append("--------------------------------------------------------------")
-      out.append("SN\t| Firstname\t\t| Lastname\t\t| Type" )
+      out.append("SN\t| Firstname \t\t| Lastname \t\t| Type" )
       out.append("--------------------------------------------------------------")
       for room in rooms:
         allocated +=room.getOccupants()
@@ -252,7 +252,7 @@ class Core():
       for person in people:
         if not (person.name() in allocated):
           count+=1
-          s = str(count)+ "\t| " + str(person.get('firstname'))+ "\t\t| " + str(person.get('lastname'))+ "\t\t| " + str(person.get('type'))
+          s = str(count)+ "\t| " + str(person.get('firstname'))+ " \t\t| " + str(person.get('lastname'))+ " \t\t| " + str(person.get('type'))
           out.append(s)
 
 
@@ -278,7 +278,7 @@ class Core():
       out.append("-------------------------------------------------------------")
       out.append("List of people not placed in Offices")
       out.append("--------------------------------------------------------------")
-      out.append("SN\t| Firstname\t\t| Lastname\t\t| Type" )
+      out.append("SN\t| Firstname \t\t| Lastname \t\t| Type" )
       out.append("--------------------------------------------------------------")
       for room in rooms:
         allocated +=room.getOccupants()
@@ -286,7 +286,7 @@ class Core():
       for person in people:
         if not (person.name() in allocated):
           count+=1
-          s = str(count)+ "\t| " + str(person.get('firstname'))+ "\t\t| " + str(person.get('lastname'))+ "\t\t| " + str(person.get('type'))
+          s = str(count)+ "\t| " + str(person.get('firstname'))+ " \t\t| " + str(person.get('lastname'))+ " \t\t| " + str(person.get('type'))
           out.append(s)
 
       if not save_to_file is None: # Prepare data for saving to file
@@ -310,7 +310,7 @@ class Core():
       out.append("-------------------------------------------------------------")
       out.append("List of pople not placed in living rooms")
       out.append("--------------------------------------------------------------")
-      out.append("SN\t| Firstname\t\t| Lastname\t\t| Type" )
+      out.append("SN\t| Firstname \t\t| Lastname \t\t| Type" )
       out.append("--------------------------------------------------------------")
       for room in rooms:
         allocated +=room.getOccupants()
@@ -318,7 +318,7 @@ class Core():
       for person in people:
         if not (person.name() in allocated):
           count+=1
-          s = str(count)+ "\t| " + str(person.get('firstname'))+ "\t\t| " + str(person.get('lastname'))+ "\t\t| " + str(person.get('type'))
+          s = str(count)+ "\t| " + str(person.get('firstname'))+ " \t\t| " + str(person.get('lastname'))+ " \t\t| " + str(person.get('type'))
           out.append(s)
 
       if not save_to_file is None: # Prepare data for saving to file
