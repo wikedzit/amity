@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/wikedzit/amity.svg?branch=master)](https://travis-ci.org/wikedzit/amity)
+[![Coverage Status](https://coveralls.io/repos/github/wikedzit/amity/badge.svg?branch=master)](https://coveralls.io/github/wikedzit/amity?branch=master)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)]()
 
 # Amity (Room Allocation App)
