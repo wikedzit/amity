@@ -18,7 +18,7 @@ class Controller(object):
 
         #check if record exists
         if model_cls.find(data):
-            return "Record already exists"
+            return "Record already exits"
             
         obj = model_cls(data)
         return obj.save()
@@ -91,12 +91,9 @@ class RoomController(Controller):
     @classmethod
     def reallocate(cls,room,person):
         if len(room.getOccupants()) < int(room.get('capacity')):
-            prev_room = cls.personRoom(person)
-            if prev_room:#This means that this person was placed in this room
-                if prev_room.get('type') != room.get("type"):
-                    return "Reallocation can only be done between rooms of the same type"
+            prev_room = cls.personRoom(room.get('type'), person)
+            if prev_room and prev_room.get('name') != room.get('name') :#This means that this person was placed in this room
                 #delete any previous placements
-
                 message = RoomController.allocate(room,person)
                 if isinstance(message,bool):
                     indx = prev_room.getOccupants().index(person.name())
@@ -104,6 +101,7 @@ class RoomController(Controller):
                     return True
                 else:
                     return message
+            return "Failed to reallocate the " + person.get("firstname") + " " + person.get("lastname") + " to " + room.get('name')
         else:
             return "This room is full. can't reallocate this person, "
 
@@ -124,11 +122,11 @@ class RoomController(Controller):
 
 
     @classmethod
-    def personRoom(cls,person):
+    def personRoom(cls,typ,person):
         rooms = Room.getAllRooms()
 
         for room in rooms:
-            if (room.hasOccupant(person)):
+            if (room.hasOccupant(person)) and room.get("type") == typ:
                 return room
         return None
 
