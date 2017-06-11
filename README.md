@@ -53,6 +53,7 @@ app.py print_room | (print_room_name)  [(room_file)]
 ## 7. Usage
 
 The following screencast shows how to run the different commands. Check it out:
+[![asciicast](https://asciinema.org/a/8835hldn9g3y2rosclvp840t9.png)](https://asciinema.org/a/8835hldn9g3y2rosclvp840t9)
 
 
 ## 8. Tests.
