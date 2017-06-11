@@ -91,13 +91,19 @@ class RoomController(Controller):
     @classmethod
     def reallocate(cls,room,person):
         if len(room.getOccupants()) < int(room.get('capacity')):
-            prev_room = cls.personRoom(room.get('type'), person)
+            prev_room = cls.personRoom(person)
             if prev_room:#This means that this person was placed in this room
+                if prev_room.get('type') != room.get("type"):
+                    return "Reallocation can only be done between rooms of the same type"
                 #delete any previous placements
-                indx = prev_room.getOccupants().index(person.name())
-                del prev_room.data["allocations"][indx]
-                #call for new reallocations after deleting
-            return RoomController.allocate(room,person)
+
+                message = RoomController.allocate(room,person)
+                if isinstance(message,bool):
+                    indx = prev_room.getOccupants().index(person.name())
+                    del prev_room.data["allocations"][indx]
+                    return True
+                else:
+                    return message
         else:
             return "This room is full. can't reallocate this person, "
 
@@ -118,11 +124,11 @@ class RoomController(Controller):
 
 
     @classmethod
-    def personRoom(cls,typ,person):
+    def personRoom(cls,person):
         rooms = Room.getAllRooms()
 
         for room in rooms:
-            if (room.hasOccupant(person)) and room.get("type") == typ:
+            if (room.hasOccupant(person)):
                 return room
         return None
 
