@@ -47,9 +47,10 @@ app.py print_room | (print_room_name)  [(room_file)]
 1. Confirm that Python is installed on your PC
 2. Download and install MongoDB [Click here for detailed instructions](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/) I recommend using Homebrew
 3. Configure python to supprt virtual environment
-4. Copy or Clone this repository to your local machine using `git clone https://github.com/wikedzit/amity.git
-5. Create a **virtualenv** on your machine and install the dependencies via `pip install -r requirements.txt` and activate it.
-6. Once all the requirements have been installed, navigate to amity/app and run python app.py
+4. Copy or Clone this repository to your local machine using `git clone https://github.com/wikedzit/amity.git`
+5. Create a **virtualenv** on your machine and activate it
+6. install the dependencies via `pip install -r requirements.txt`.
+7. Once all the requirements have been installed, navigate to amity/app and run python app.py
 
 ## 7. Usage
 
