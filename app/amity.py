@@ -33,9 +33,9 @@ class Amity(object):
             datab["rooms"].remove({})
             datab["people"].remove({})
         except Exception as e:
-            raise
+            False
         else:
-            return
+            True
 
     """-------------------------------------------------------------------
     load() method, used for fetching all records/documents from a given collection/table
@@ -160,13 +160,6 @@ class Amity(object):
             return self.data[attrib]
         else:
             return None
-
-    """------------------------------------------------------------------
-    oid() method, used returns an objectId for a record
-    It is an instance variable, can be called by immediate and Deep Amity Subclassed objects
-    """
-    def oid(self):
-        return str(self.get('_id'))
 
 
     """------------------------------------------------------------------
