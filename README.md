@@ -3,7 +3,7 @@
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)]()
 
 # Amity (Room Allocation App)
-Smart room allocator, a simple but yet powerfull room allocator
+Smart room allocator, a simple but yet powerfull room allocator 
 
 ## 1. About the App.
 
