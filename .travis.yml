@@ -8,9 +8,8 @@ install:
 
 before_script:
   - "cd app"
-  - "cd tests"
-
+  
 script:
-  - coverage run -m unittest 
+  - coverage run --omit=core.py,app.py,templating.py  --source=. -m unittest discover -s tests/
 after_success:
   - coveralls 
