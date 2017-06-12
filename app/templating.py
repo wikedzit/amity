@@ -6,6 +6,7 @@ from colorama import init
 from termcolor import cprint
 from pyfiglet import figlet_format
 from controller import Controller
+from core import Core
 
 def app_intro():
     click.secho('*' * 60, fg='yellow')
@@ -20,6 +21,7 @@ def intro_msg():
         """
     """""""""""'Room allocation system'"""""""""
         """, bold=True, fg='white')
+    Core().help()
 
 def intro_header():
     click.clear()

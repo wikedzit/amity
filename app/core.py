@@ -419,31 +419,34 @@ class Core():
         else:
           click.secho("Wrong data format", fg='red')
 
+    def currentDB(self):
+      return Amity.db
 
     def help(self):
       usage = """
       Usage:
         #Rooms Management
-          add_room <type> <name>... 
+          add_room <type> <name>...  ** type can be o/office OR l/living
           delete_room  <name>
           show_rooms
-          load_rooms <room_file>
+          load_rooms <path_to_file>
 
         #People Managment
-          add_person <firstname> <lastname> <type> [<accomodation>]
+          add_person <firstname> <lastname> <type> [<accomodation>] ** type can be s/staff OR f/fellow
           delete_person <firstname> <lastname> 
           show_people
-          load_people <people_file>
+          load_people <path_to_file>
 
         #Operations
           auto_reallocate
           reallocate <firstname> <lastname> <new_room_name>
-          print_allocations [<room_file>]
-          print_unallocated [<room_file>]
-          print_unallocated_offices [<room_file>]
-          print_unallocated_living [<room_file>]
-          print_room  <print_room_name>  [<room_file>]
-          save_state
+          print_allocations [<path_to_file>]
+          print_unallocated [<path_to_file>]
+          print_unallocated_offices [<path_to_file>]
+          print_unallocated_living [<path_to_file>]
+          print_room  <print_room_name>  [<path_to_file>]
+          load_state <database_name>
+          save_state [<database_name>]
           exit | quit
       """
       print(usage)

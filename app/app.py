@@ -20,7 +20,7 @@ class App(cmd.Cmd):
 
     def do_save_state(self,  args):
       """
-      Usage: save_state <database>
+      Usage: save_state [<database>]
       """
       parsed_input = None
       try:
@@ -30,7 +30,11 @@ class App(cmd.Cmd):
           return
 
       db = parsed_input["<database>"].lower()
+      if not db:
+        db = core.currentDB()
+
       core.save_state(db)
+
 
     def do_load_state(self,  args):
       """
