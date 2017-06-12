@@ -309,29 +309,13 @@ class App(cmd.Cmd):
         core.load_rooms(file_name)
 
 
-
     def do_quit(self, arg):
-        """Quits out of Interactive Mode."""
-        response = click.confirm("Do you want to save state before exiting ?")         
-        if response == "y" or response == "Y" or response== True: 
-          core.save_state()
-          click.secho('Thank you for using Amity Room Allocation App', fg='green')
-        else:
-          click.secho('Thank you for using Amity Room Allocation App', fg='green')
-
+        click.secho('Thank you for using Amity Room Allocation App', fg='green')
         exit()
 
 
-
     def do_exit(self, arg):
-        """Quits out of Interactive Mode."""
-        response = click.confirm("Do you want to save state before exiting ?")         
-        if response == "y" or response == "Y" or response== True: 
-          core.save_state()
-          click.secho('Thank you for using Amity Room Allocation App', fg='green')
-        else:
-          click.secho('Thank you for using Amity Room Allocation App', fg='green')
-
+        click.secho('Thank you for using Amity Room Allocation App', fg='green')
         exit()
 
 
