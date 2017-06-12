@@ -1,5 +1,6 @@
 language: python
 python:
+  - "3.3"
   - "3.4"
   - "3.5"
   - "3.5-dev" # 3.5 development branch
@@ -13,12 +14,10 @@ install:
   - "pip install coveralls"
 
 before_script:
-  - cd app
-  - cd tests
+  - "cd app"
+  - "cd tests"
 
 script:
   - coverage run -m unittest 
 after_success:
   - coveralls
-
-
