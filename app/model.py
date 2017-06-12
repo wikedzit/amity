@@ -55,7 +55,6 @@ class Staff(People):
         self.data.update({"type":"staff"})
 #----------------------------------------------
 
-
 class Room(Amity):
     """docstring for Room"""
     _table = "rooms"
@@ -86,14 +85,6 @@ class Room(Amity):
 
     def hasOccupant(self,person):
         return person.name() in self.getOccupants()
-
-    @classmethod
-    def getAllAllocatedPeople(cls):
-        rooms = cls.getRooms()
-        occupants = []
-        for room in rooms:
-            occupants += room.data["allocations"]
-        return occupants
 
 
 class Office(Room):

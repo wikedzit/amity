@@ -30,8 +30,8 @@ class Amity(object):
     @classmethod
     def cleanDb(cls):
         try:
-            datab["rooms"].remove({})
-            datab["people"].remove({})
+            datab["rooms"].delete_many({})
+            datab["people"].delete_many({})
         except Exception as e:
             False
         else:

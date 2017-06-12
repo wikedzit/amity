@@ -49,22 +49,29 @@ class Controller(object):
 
     @classmethod
     def load_state(cls):
-        People.loadPeople()
-        Room.loadRooms()
-        return True
+        try:
+            People.loadPeople()
+            Room.loadRooms()
+        except Exception as e:
+            return False
+        else:
+            return True
 
     @classmethod
     def save_state(cls):
-        Amity.cleanDb()
-        rooms = Room.getAllRooms()
-        people = People.getAllPeople()
-        for room in rooms:
-            room.save_state()
+        try:
+            Amity.cleanDb()
+            rooms = Room.getAllRooms()
+            people = People.getAllPeople()
+            for room in rooms:
+                room.save_state()
 
-        for person in people:
-            person.save_state()
-        
-        return True
+            for person in people:
+                person.save_state()
+        except Exception as e:
+            return False
+        else:
+            return True
 #-----------------------------------------------
 class RoomController(Controller):
 
