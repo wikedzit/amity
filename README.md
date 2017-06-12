@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/wikedzit/amity.svg?branch=master)](https://travis-ci.org/wikedzit/amity)
 [![Coverage Status](https://coveralls.io/repos/github/wikedzit/amity/badge.png?branch=dev-core)](https://coveralls.io/github/wikedzit/amity?branch=dev-core)
-[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/wikedzit)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)]()
+[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/wikedzit)
 
 # Amity (Room Allocation App)
 Smart room allocator, a simple but yet powerfull room allocator 
