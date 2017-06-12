@@ -15,7 +15,6 @@ def app_intro():
     click.secho('*' * 60, fg='white')
     click.secho('*' * 60, fg='yellow')
 
-
 def intro_msg():
     click.secho(
         """
@@ -29,9 +28,8 @@ def intro_header():
     with click.progressbar(range(10000), fill_char=click.style('(', fg='white', bg='red')) as prog_bar:
         for i in prog_bar:
             pass
-
-        Controller.load_state()
-        click.secho("  Data loaded from the Database", fg='green')
+        #Controller.load_state()
+        #click.secho("  Data loaded from the Database", fg='green')
 
     click.secho('' * 75)
     click.secho('' * 75)

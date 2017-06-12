@@ -19,7 +19,32 @@ class App(cmd.Cmd):
       core.help()
 
     def do_save_state(self,  args):
-      core.save_state()
+      """
+      Usage: save_state <database>
+      """
+      parsed_input = None
+      try:
+          parsed_input = docopt(self.do_save_state.__doc__, args)
+      except DocoptExit  as e:
+          print(e)
+          return
+
+      db = parsed_input["<database>"].lower()
+      core.save_state(db)
+
+    def do_load_state(self,  args):
+      """
+      Usage: load_state <database>
+      """
+      parsed_input = None
+      try:
+          parsed_input = docopt(self.do_load_state.__doc__, args)
+      except DocoptExit  as e:
+          print(e)
+          return
+
+      db = parsed_input["<database>"].lower()
+      core.load_state(db)
 
     def do_add_room(self,  args):
         """

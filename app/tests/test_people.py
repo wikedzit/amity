@@ -11,6 +11,7 @@ class TestPerson(unittest.TestCase):
     """docstring for OfficeTest"""
     
     def setUp(self):
+        Amity.pdb = "tests" # Sets the db to use
         self.staff = StaffController.new(Staff,{"firstname":"James", "lastname":"Ndiga"})
         self.fellow = FellowController.new(Fellow,{"firstname":"Timothy", "lastname":"Wikedzi"})
    
@@ -50,6 +51,7 @@ class TestPerson(unittest.TestCase):
     def tearDown(self):
         self.staff.delete()
         self.fellow.delete()
+        Amity.cleanDb()
 
 if __name__ == '__main__':
     unittest.main()

@@ -13,7 +13,6 @@ class People(Amity):
                             "file":r"([a-zA-Z]+)"
                         }
 
-
     def __init__(self):
         super(People,self).__init__()
         self.table = "people"

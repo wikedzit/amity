@@ -48,8 +48,9 @@ class Controller(object):
         return False
 
     @classmethod
-    def load_state(cls):
+    def load_state(cls,db="defaut"):
         try:
+            Amity.pdb = db
             People.loadPeople()
             Room.loadRooms()
         except Exception as e:
@@ -58,8 +59,9 @@ class Controller(object):
             return True
 
     @classmethod
-    def save_state(cls):
+    def save_state(cls,db="default"):
         try:
+            Amity.pdb = db
             Amity.cleanDb()
             rooms = Room.getAllRooms()
             people = People.getAllPeople()

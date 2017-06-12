@@ -24,6 +24,8 @@ class Amity(object):
         "people":[]
     }
 
+    pdb = "amity"
+
     def __init__(self):
         pass
 
@@ -47,7 +49,7 @@ class Amity(object):
     def load(cls):
         tb = str(cls._table)
         try:
-            data= datab[tb].find(cls.fltr)
+            data= client[Amity.pdb][tb].find(cls.fltr)
             records = []
             for datum in data:# Get datum as a  dictionary 
                 if len(datum) > 0: #Check if datum contains an item

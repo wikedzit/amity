@@ -7,18 +7,18 @@ class Core():
     def __init__(self):
       pass
 
-    def load_state(self):
+    def load_state(self,db):
       try:
-        Controller.load_state()
+        Controller.load_state(db)
       except Exception as e:
          click.secho("Failed to load data", fg='red')
          return       
       else:
         click.secho("Data Loaded", fg='green')
 
-    def save_state(self):
+    def save_state(self, db):
       try:
-        Controller.save_state()
+        Controller.save_state(db)
       except Exception as e:
         click.secho("Failed to save data to the database", fg='red')
         return

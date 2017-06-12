@@ -11,6 +11,7 @@ class TestRoom(unittest.TestCase):
     """docstring for OfficeTest"""
     
     def setUp(self):
+        Amity.pdb = "tests" # sets the db to use
         self.office = OfficeController.new(Office,{"name":"Tsavo"})
         self.living = LivingController.new(Living,{"name":"Dojo"})
         self.staff = StaffController.new(Staff,{"firstname":"Roger", "lastname":"Taracha"})
