@@ -5,7 +5,7 @@ import time
 from bson.objectid import ObjectId
 from amity import Amity
 from model import People,Office,Staff,Fellow,Living
-from controller import OfficeController,StaffController, FellowController, LivingController,RoomController
+from controller import Controller,OfficeController,StaffController, FellowController, LivingController,RoomController
 
 class TestRoom(unittest.TestCase):
     """docstring for OfficeTest"""
@@ -120,7 +120,9 @@ class TestRoom(unittest.TestCase):
         self.assertNotIn(self.office.name(),offices_after)
         #self.assertTrue(True)
 
-
+    def test_can_save_state(self):
+       self.assertTrue(StaffController.save_state())
+    
     def tearDown(self):
         self.office.delete()
         self.living.delete()
