@@ -89,7 +89,9 @@ class People(Amity):
 class Fellow(People):
     """docstring for Office"""
     
-    def __init__(self,oid=0,dt={}):
+    def __init__(self,oid=0,dt=None):
+        if dt is None:
+            dt = {}
         super(Fellow, self).__init__(oid)
         self.data = dt
         self.data.update({"type":"fellow"})
@@ -98,7 +100,9 @@ class Fellow(People):
 
 class Staff(People):
     """docstring for Office"""
-    def __init__(self,oid=0,dt={}):
+    def __init__(self,oid=0,dt=None):
+        if dt is None:
+            dt = {}
         super(Staff, self).__init__(oid)
         self.data = dt
         self.data.update({"type":"staff"})
@@ -149,7 +153,9 @@ class Room(Amity):
 class Office(Room):
     """docstring for Office"""
     room_type = "office"
-    def __init__(self, oid=0, dt={}):
+    def __init__(self, oid=0, dt=None):
+        if dt is None:
+            dt = {}
         super(Office, self).__init__(oid)
         self.data = dt
         if not "capacity" in dt:
@@ -161,7 +167,9 @@ class Office(Room):
 class Living(Room):
     """docstring for Office"""
     room_type = "living"
-    def __init__(self,oid=0, dt={}):
+    def __init__(self,oid=0, dt=None):
+        if dt is None:
+            dt = {}
         super(Living, self).__init__(oid)
         if not "capacity" in dt:
             dt.update({"type":"living","capacity":4,"allocations":[]})
