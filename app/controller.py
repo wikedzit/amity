@@ -18,7 +18,9 @@ class Controller(object):
         return model_cls.all()
 
     @classmethod
-    def new(cls,model_cls,data={"name":""}): 
+    def new(cls,model_cls,data=None): 
+        if data is None:
+                data = {"name":""}
         validators = model_cls.validators
         for key, value in validators.items():
             p = re.compile(value)
