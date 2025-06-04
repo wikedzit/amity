@@ -8,7 +8,7 @@ from model import Staff
 from model import Fellow
 
 
-class Controller(object):
+class Controller:
     """docstring for Controler"""
     def __init__(self):
         pass
@@ -57,7 +57,7 @@ class Controller(object):
 class RoomController(Controller):
     """docstring for ClassName"""
     def __init__(self):
-        super(RoomController, self).__init__()
+        super().__init__()
 
 
     @classmethod
@@ -99,7 +99,7 @@ class RoomController(Controller):
 class OfficeController(RoomController):
     """docstring for ClassName"""
     def __init__(self):
-        super(OfficeController, self).__init__()
+        super().__init__()
 
     
     @classmethod
@@ -135,7 +135,7 @@ class OfficeController(RoomController):
 class LivingController(RoomController):
     """docstring for ClassName"""
     def __init__(self):
-        super(LivingController, self).__init__()
+        super().__init__()
 
     @classmethod
     def allocate(cls,room,person):
@@ -174,7 +174,7 @@ class LivingController(RoomController):
 class PeopleController(Controller):
     """docstring for PeopleController"""
     def __init__(self):
-        super(PeopleController, self).__init__()
+        super().__init__()
     
     @classmethod
     def importPeople(cls, data):
@@ -191,11 +191,11 @@ class PeopleController(Controller):
 class StaffController(PeopleController):
     """docstring for ClassName"""
     def __init__(self):
-        super(StaffController, self).__init__()
+        super().__init__()
 
 
 class FellowController(PeopleController):
     """docstring for ClassName"""
     def __init__(self):
-        super(FellowController, self).__init__()
+        super().__init__()
 

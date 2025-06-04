@@ -1,7 +1,7 @@
 import time
 
 
-class Amity(object):
+class Amity:
     """
         Amity is the root Model class. Defines data management functions
         that are inherited by all its subclasses
@@ -76,7 +76,7 @@ class People(Amity):
                             "file":r"([a-zA-Z]+)"
                         }
     def __init__(self,oid=0):
-        super(People,self).__init__(oid,People._table)
+        super().__init__(oid,People._table)
 
 
     def typeIs(self,type):
@@ -90,7 +90,7 @@ class Fellow(People):
     """docstring for Office"""
     
     def __init__(self,oid=0,dt={}):
-        super(Fellow, self).__init__(oid)
+        super().__init__(oid)
         self.data = dt
         self.data.update({"type":"fellow"})
 
@@ -99,7 +99,7 @@ class Fellow(People):
 class Staff(People):
     """docstring for Office"""
     def __init__(self,oid=0,dt={}):
-        super(Staff, self).__init__(oid)
+        super().__init__(oid)
         self.data = dt
         self.data.update({"type":"staff"})
 #----------------------------------------------
@@ -110,7 +110,7 @@ class Room(Amity):
     validators = {"name":r"(\w+)"}
 
     def __init__(self,oid=0):
-        super(Room,self).__init__(oid,Room._table)
+        super().__init__(oid,Room._table)
 
     @classmethod
     def getRooms(cls):
@@ -150,7 +150,7 @@ class Office(Room):
     """docstring for Office"""
     room_type = "office"
     def __init__(self, oid=0, dt={}):
-        super(Office, self).__init__(oid)
+        super().__init__(oid)
         self.data = dt
         if not "capacity" in dt:
             self.data.update({"type":"office","capacity":6,"allocations":[]})
@@ -162,7 +162,7 @@ class Living(Room):
     """docstring for Office"""
     room_type = "living"
     def __init__(self,oid=0, dt={}):
-        super(Living, self).__init__(oid)
+        super().__init__(oid)
         if not "capacity" in dt:
             dt.update({"type":"living","capacity":4,"allocations":[]})
         else:
